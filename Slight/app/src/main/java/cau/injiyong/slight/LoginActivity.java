@@ -12,7 +12,9 @@ import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.ApiErrorCode;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeV2ResponseCallback;
+import com.kakao.usermgmt.callback.UnLinkResponseCallback;
 import com.kakao.usermgmt.response.MeV2Response;
+import com.kakao.util.OptionalBoolean;
 import com.kakao.util.exception.KakaoException;
 
 public class LoginActivity extends AppCompatActivity {
@@ -66,11 +68,81 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onSuccess(MeV2Response result) {
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.putExtra("name", result.getNickname());
-                    intent.putExtra("profile", result.getProfileImagePath());
-                    startActivity(intent);
-                    finish();
+                    String needsScopeAutority = ""; // 정보 제공이 허용되지 않은 항목의 이름을 저장하는 변수
+
+                    // 이메일, 성별, 연령대, 생일 정보를 제공하는 것에 동의했는지 체크
+                    if(result.getKakaoAccount().needsScopeAccountEmail()) {
+                        needsScopeAutority = needsScopeAutority + "이메일";
+                    }
+                    if(result.getKakaoAccount().needsScopeGender()) {
+                        needsScopeAutority = needsScopeAutority + ", 성별";
+                    }
+                    if(result.getKakaoAccount().needsScopeAgeRange()) {
+                        needsScopeAutority = needsScopeAutority + ", 연령대";
+                    }
+                    if(result.getKakaoAccount().needsScopeBirthday()) {
+                        needsScopeAutority = needsScopeAutority + ", 생일";
+                    }
+
+                    if(needsScopeAutority.length() != 0) { // 정보 제공이 허용되지 않은 항목이 있다면 -> 허용되지 않은 항목을 안내하고 회원탈퇴 처리
+                        if(needsScopeAutority.charAt(0) == ',') {
+                            needsScopeAutority = needsScopeAutority.substring(2);
+                        }
+                        Toast.makeText(getApplicationContext(), needsScopeAutority+"에 대한 권한이 허용되지 않았습니다. 개인정보 제공에 동의해주세요.", Toast.LENGTH_SHORT).show(); // 개인정보 제공에 동의해달라는 Toast 메세지 띄움
+
+                        // 회원탈퇴 처리
+                        UserManagement.getInstance().requestUnlink(new UnLinkResponseCallback() {
+                            @Override
+                            public void onFailure(ErrorResult errorResult) {
+                                int result = errorResult.getErrorCode();
+
+                                if(result == ApiErrorCode.CLIENT_ERROR_CODE) {
+                                    Toast.makeText(getApplicationContext(), "네트워크 연결이 불안정합니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "오류가 발생했습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onSessionClosed(ErrorResult errorResult) {
+                                Toast.makeText(getApplicationContext(), "로그인 세션이 닫혔습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onNotSignedUp() {
+                                Toast.makeText(getApplicationContext(), "가입되지 않은 계정입니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onSuccess(Long result) { }
+                        });
+
+                    } else { // 모든 항목에 동의했다면 -> 유저 정보를 가져와서 MainActivity에 전달하고 MainActivity 실행.
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra("name", result.getNickname());
+                        intent.putExtra("profile", result.getProfileImagePath());
+
+                        if (result.getKakaoAccount().hasEmail() == OptionalBoolean.TRUE)
+                            intent.putExtra("email", result.getKakaoAccount().getEmail());
+                        else
+                            intent.putExtra("email", "none");
+                        if (result.getKakaoAccount().hasAgeRange() == OptionalBoolean.TRUE)
+                            intent.putExtra("ageRange", result.getKakaoAccount().getAgeRange().getValue());
+                        else
+                            intent.putExtra("ageRange", "none");
+                        if (result.getKakaoAccount().hasGender() == OptionalBoolean.TRUE)
+                            intent.putExtra("gender", result.getKakaoAccount().getGender().getValue());
+                        else
+                            intent.putExtra("gender", "none");
+                        if (result.getKakaoAccount().hasBirthday() == OptionalBoolean.TRUE)
+                            intent.putExtra("birthday", result.getKakaoAccount().getBirthday());
+                        else
+                            intent.putExtra("birthday", "none");
+
+
+                        startActivity(intent);
+                        finish();
+                    }
                 }
             });
         }

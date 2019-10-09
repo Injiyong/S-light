@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         TextView tvGender = findViewById(R.id.tvGender);
         TextView tvBirthday = findViewById(R.id.tvBirthday);
 
-
         Intent intent = getIntent();
         strNickname = intent.getStringExtra("name");
         strProfile = intent.getStringExtra("profile");

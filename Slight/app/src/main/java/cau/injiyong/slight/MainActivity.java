@@ -58,6 +58,17 @@ public class MainActivity extends AppCompatActivity {
         tvGender.setText(strGender);
         tvBirthday.setText(strBirthday);
 
+        //NEXT버튼 click 시 다음 화면으로 이동하기
+        Button btnNext= findViewById(R.id.btnNext);
+        btnNext.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v ){
+                Intent intent=new Intent(getApplicationContext(),TextActivity.class);
+                startActivity(intent);
+            }
+                                   });
+
 
         btnLogout.setOnClickListener(new Button.OnClickListener() {
             @Override

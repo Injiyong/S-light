@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kakao.network.ApiErrorCode;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
@@ -24,6 +26,7 @@ import com.kakao.usermgmt.callback.UnLinkResponseCallback;
 public class MainActivity extends AppCompatActivity {
 
     String strNickname, strProfile, strEmail, strAgeRange, strGender, strBirthday;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

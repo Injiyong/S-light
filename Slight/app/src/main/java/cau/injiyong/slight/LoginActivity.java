@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
@@ -40,6 +44,10 @@ public class LoginActivity extends AppCompatActivity {
     //    private SessionCallback sessionCallback;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
+
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,11 +100,27 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                           //유저 정보 디비에 넘기려고 추가한 부분
+                            String tokenID=FirebaseInstanceId.getInstance().getToken();
+                            database = FirebaseDatabase.getInstance();
+                            myRef = database.getReference("userProfile");
+
+
+                            if(!TextUtils.isEmpty(tokenID)){
+                                UserData UserData=new UserData();
+                                UserData.firebasekey=tokenID;
+
+                                myRef.child(tokenID).setValue(UserData);
+
+                            }
+
                             Toast.makeText(LoginActivity.this, "ID 생성완료", Toast.LENGTH_SHORT).show();
                             // Sign in success, update UI with the signed-in user's information
                             //Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
+                          //  updateUI(user);
+
+
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                             finish();

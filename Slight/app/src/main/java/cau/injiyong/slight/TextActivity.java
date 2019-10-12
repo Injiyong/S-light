@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class TextActivity extends AppCompatActivity {
 
@@ -31,19 +32,23 @@ public class TextActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text);
 
+
         tvMessage = (TextView) findViewById(R.id.tv_message);
         etNewMessage = (EditText) findViewById(R.id.et_newData);
         btUpdate = (Button) findViewById(R.id.bt_update);
 
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("message");
+        myRef = database.getReference("userProfile");
 
         //버튼 이벤트
         btUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String tokenID=FirebaseInstanceId.getInstance().getToken();
+                UserData UserData =new UserData();
                 String newMessage = etNewMessage.getText().toString();
-                myRef.setValue(newMessage);
+                UserData.memo_list.add(newMessage);
+                myRef.child(tokenID).setValue(UserData.memo_list);
             }
         });
 
@@ -54,10 +59,10 @@ public class TextActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
+           //     String value = dataSnapshot.getValue(String.class);
                 //데이터를 화면에 출력해 준다.
-                tvMessage.setText(value);
-                Log.d(TAG, "Value is: " + value);
+             //   tvMessage.setText(value);
+           //     Log.d(TAG, "Value is: " + value);
             }
 
             @Override
@@ -68,3 +73,4 @@ public class TextActivity extends AppCompatActivity {
         });
     }
 }
+

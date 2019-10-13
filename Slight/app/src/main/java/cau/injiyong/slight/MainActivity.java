@@ -72,6 +72,19 @@ public class MainActivity extends AppCompatActivity {
             }
                                    });
 
+        // setting 화면으로 이동
+        Button btnSet= findViewById(R.id.btnSet);
+        btnSet.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v ){
+                Intent intent=new Intent(getApplicationContext(),
+                        Setting.class); //넘어갈 클래스
+                startActivity(intent);
+            }
+        });
+
+
 
         btnLogout.setOnClickListener(new Button.OnClickListener() {
             @Override

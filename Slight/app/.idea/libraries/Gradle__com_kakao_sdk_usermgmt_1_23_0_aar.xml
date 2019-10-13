@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.kakao.sdk:usermgmt:1.23.0@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/07fc7c12f0084ec05ec1fa98788b2023/usermgmt-1.23.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/07fc7c12f0084ec05ec1fa98788b2023/usermgmt-1.23.0/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.kakao.sdk/usermgmt/1.23.0/f41dda6b2306dbf9c61a2055f5160edfacab82a0/usermgmt-1.23.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

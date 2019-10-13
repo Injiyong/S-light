@@ -2,6 +2,7 @@ package cau.injiyong.slight;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +28,9 @@ public class TextActivity extends AppCompatActivity {
     EditText etNewMessage;
     Button btUpdate;
 
+    String tokenID=FirebaseInstanceId.getInstance().getToken();
+    UserData UserData =new UserData();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,17 +42,29 @@ public class TextActivity extends AppCompatActivity {
         btUpdate = (Button) findViewById(R.id.bt_update);
 
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("userProfile");
+        myRef = database.getReference("userInfo");
+
+
+        //List 버튼 클릭시 list 창으로 넘어감
+        Button btnNext= findViewById(R.id.bt_list);
+        btnNext.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v ){
+                Intent intent=new Intent(getApplicationContext(),MemoList.class);
+                startActivity(intent);
+            }
+        });
+
 
         //버튼 이벤트
         btUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String tokenID=FirebaseInstanceId.getInstance().getToken();
-                UserData UserData =new UserData();
+
                 String newMessage = etNewMessage.getText().toString();
-                UserData.memo_list.add(newMessage);
-                myRef.child(tokenID).setValue(UserData.memo_list);
+
+                myRef.child(tokenID).child("memo_list").push().setValue(newMessage);
             }
         });
 

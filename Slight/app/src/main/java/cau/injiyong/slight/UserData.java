@@ -1,7 +1,6 @@
 package cau.injiyong.slight;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class UserData{
 
@@ -9,5 +8,5 @@ public class UserData{
 
     public String firebasekey;
 
-    public List<String> memo_list=new ArrayList<String>();
+
 }

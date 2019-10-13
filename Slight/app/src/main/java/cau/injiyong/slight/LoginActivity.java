@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                            //유저 정보 디비에 넘기려고 추가한 부분
                             String tokenID=FirebaseInstanceId.getInstance().getToken();
                             database = FirebaseDatabase.getInstance();
-                            myRef = database.getReference("userProfile");
+                            myRef = database.getReference("userInfo");
 
 
                             if(!TextUtils.isEmpty(tokenID)){

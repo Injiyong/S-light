@@ -25,7 +25,7 @@ import com.kakao.usermgmt.callback.UnLinkResponseCallback;
 
 public class MainActivity extends AppCompatActivity {
 
-    String strNickname, strProfile, strEmail, strAgeRange, strGender, strBirthday;
+    //String strNickname, strProfile, strEmail, strAgeRange, strGender, strBirthday;
 
 
     @Override
@@ -34,32 +34,32 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        TextView tvNickname = findViewById(R.id.tvNickname);
-        ImageView ivProfile = findViewById(R.id.ivProfile);
+//
+//        TextView tvNickname = findViewById(R.id.tvNickname);
+//        ImageView ivProfile = findViewById(R.id.ivProfile);
         Button btnLogout = findViewById(R.id.btnLogout);
-        Button btnSignout = findViewById(R.id.btnSignout);
+//        Button btnSignout = findViewById(R.id.btnSignout);
 
-        TextView tvEmail = findViewById(R.id.tvEmail);
-        TextView tvAgeRange = findViewById(R.id.tvAgeRange);
-        TextView tvGender = findViewById(R.id.tvGender);
-        TextView tvBirthday = findViewById(R.id.tvBirthday);
+//        TextView tvEmail = findViewById(R.id.tvEmail);
+//        TextView tvAgeRange = findViewById(R.id.tvAgeRange);
+//        TextView tvGender = findViewById(R.id.tvGender);
+//        TextView tvBirthday = findViewById(R.id.tvBirthday);
 
         Intent intent = getIntent();
-        strNickname = intent.getStringExtra("name");
-        strProfile = intent.getStringExtra("profile");
-        strEmail = intent.getStringExtra("email");
-        strAgeRange = intent.getStringExtra("ageRange");
-        strGender = intent.getStringExtra("gender");
-        strBirthday = intent.getStringExtra("birthday");
-
-
-        tvNickname.setText(strNickname);
-        Glide.with(this).load(strProfile).into(ivProfile);
-        tvEmail.setText(strEmail);
-        tvAgeRange.setText(strAgeRange);
-        tvGender.setText(strGender);
-        tvBirthday.setText(strBirthday);
+//        strNickname = intent.getStringExtra("name");
+//        strProfile = intent.getStringExtra("profile");
+//        strEmail = intent.getStringExtra("email");
+//        strAgeRange = intent.getStringExtra("ageRange");
+//        strGender = intent.getStringExtra("gender");
+//        strBirthday = intent.getStringExtra("birthday");
+//
+//
+//        tvNickname.setText(strNickname);
+//        Glide.with(this).load(strProfile).into(ivProfile);
+//        tvEmail.setText(strEmail);
+//        tvAgeRange.setText(strAgeRange);
+//        tvGender.setText(strGender);
+//        tvBirthday.setText(strBirthday);
 
         //NEXT버튼 click 시 다음 화면으로 이동하기
         Button btnNext= findViewById(R.id.btnNext);
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogout.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signOut();
+                FirebaseAuth.getInstance().signOut();
                 Toast.makeText(getApplicationContext(), "정상적으로 로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
 
 
@@ -103,67 +103,62 @@ public class MainActivity extends AppCompatActivity {
 //                });
             }
         });
-
-        btnSignout.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(MainActivity.this)
-                        .setMessage("탈퇴하시겠습니까?")
-                        .setPositiveButton("네", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                UserManagement.getInstance().requestUnlink(new UnLinkResponseCallback() {
-                                    @Override
-                                    public void onFailure(ErrorResult errorResult) {
-                                        int result = errorResult.getErrorCode();
-
-                                        if(result == ApiErrorCode.CLIENT_ERROR_CODE) {
-                                            Toast.makeText(getApplicationContext(), "네트워크 연결이 불안정합니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), "회원탈퇴에 실패했습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onSessionClosed(ErrorResult errorResult) {
-                                        Toast.makeText(getApplicationContext(), "로그인 세션이 닫혔습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-
-                                    @Override
-                                    public void onNotSignedUp() {
-                                        Toast.makeText(getApplicationContext(), "가입되지 않은 계정입니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-
-                                    @Override
-                                    public void onSuccess(Long result) {
-                                        Toast.makeText(getApplicationContext(), "회원탈퇴에 성공했습니다.", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                });
-
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();
-            }
-        });
-    }
-    public void signOut() {
-        // [START auth_sign_out]
-        FirebaseAuth.getInstance().signOut();
-        // [END auth_sign_out]
+//
+//        btnSignout.setOnClickListener(new Button.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                new AlertDialog.Builder(MainActivity.this)
+//                        .setMessage("탈퇴하시겠습니까?")
+//                        .setPositiveButton("네", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                UserManagement.getInstance().requestUnlink(new UnLinkResponseCallback() {
+//                                    @Override
+//                                    public void onFailure(ErrorResult errorResult) {
+//                                        int result = errorResult.getErrorCode();
+//
+//                                        if(result == ApiErrorCode.CLIENT_ERROR_CODE) {
+//                                            Toast.makeText(getApplicationContext(), "네트워크 연결이 불안정합니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
+//                                        } else {
+//                                            Toast.makeText(getApplicationContext(), "회원탈퇴에 실패했습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void onSessionClosed(ErrorResult errorResult) {
+//                                        Toast.makeText(getApplicationContext(), "로그인 세션이 닫혔습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
+//                                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                                        startActivity(intent);
+//                                        finish();
+//                                    }
+//
+//                                    @Override
+//                                    public void onNotSignedUp() {
+//                                        Toast.makeText(getApplicationContext(), "가입되지 않은 계정입니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
+//                                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                                        startActivity(intent);
+//                                        finish();
+//                                    }
+//
+//                                    @Override
+//                                    public void onSuccess(Long result) {
+//                                        Toast.makeText(getApplicationContext(), "회원탈퇴에 성공했습니다.", Toast.LENGTH_SHORT).show();
+//                                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                                        startActivity(intent);
+//                                        finish();
+//                                    }
+//                                });
+//
+//                                dialog.dismiss();
+//                            }
+//                        })
+//                        .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.dismiss();
+//                            }
+//                        }).show();
+//            }
+//        });
     }
 }

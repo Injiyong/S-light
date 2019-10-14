@@ -163,8 +163,8 @@
         android:id="@+id/btnVoice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="400dp"
-        android:layout_marginLeft="125dp"
+        android:layout_marginTop="490dp"
+        android:layout_marginLeft="160dp"
         android:padding="0dp"
         android:src="@drawable/voice"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -172,10 +172,10 @@
 
     <ImageView
         android:id="@+id/light"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_marginTop="100dp"
-        android:layout_marginLeft="100dp"
+        android:layout_marginLeft="110dp"
         android:src="@drawable/light"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -184,8 +184,8 @@
         android:id="@+id/lightSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
-        android:layout_marginLeft="200dp"
+        android:layout_marginTop="312dp"
+        android:layout_marginLeft="240dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -193,7 +193,7 @@
         android:id="@+id/brightness"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="290dp"
+        android:layout_marginTop="350dp"
         android:layout_marginLeft="40dp"
         android:text="밝기"
         android:textSize="16sp"
@@ -204,7 +204,7 @@
         android:id="@+id/saturation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="330dp"
+        android:layout_marginTop="390dp"
         android:layout_marginLeft="40dp"
         android:text="채도"
         android:textSize="16sp"
@@ -213,18 +213,18 @@
 
     <SeekBar
         android:id="@+id/brightnessBar"
-        android:layout_width="200dp"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="290dp"
+        android:layout_marginTop="350dp"
         android:layout_marginLeft="80dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <SeekBar
         android:id="@+id/saturationBar"
-        android:layout_width="200dp"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="330dp"
+        android:layout_marginTop="390dp"
         android:layout_marginLeft="80dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -233,7 +233,7 @@
         android:id="@+id/timer"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="360dp"
+        android:layout_marginTop="430dp"
         android:layout_marginLeft="70dp"
         android:src="@drawable/timer"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -243,8 +243,8 @@
         android:id="@+id/timerSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="370dp"
-        android:layout_marginLeft="150dp"
+        android:layout_marginTop="430dp"
+        android:layout_marginLeft="170dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

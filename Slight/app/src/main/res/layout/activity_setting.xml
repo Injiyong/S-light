@@ -25,7 +25,8 @@
             android:id="@+id/rb_red"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/red" />
+            android:text="@string/red"
+            android:onClick="OnClickHandlerRed"/>
 
         <RadioButton
             android:id="@+id/rb_blue"
@@ -102,6 +103,148 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+    <Button
+        android:id="@+id/exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="완료"
+        tools:layout_editor_absoluteX="289dp"
+        tools:layout_editor_absoluteY="670dp" />
+
+    <RadioGroup
+
+        android:id="@+id/radioGroup2"
+        android:layout_width="wrap_content"
+        android:layout_height="54dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginLeft="104dp"
+        android:layout_marginTop="226dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/radioButton4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="빨강"
+            app:layout_constraintEnd_toStartOf="@+id/radioButton5"
+            tools:layout_editor_absoluteY="228dp" />
+
+        <RadioButton
+            android:id="@+id/radioButton5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="빨강"
+            tools:layout_editor_absoluteX="178dp"
+            tools:layout_editor_absoluteY="228dp" />
+
+        <RadioButton
+            android:id="@+id/radioButton6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="빨강"
+            app:layout_constraintStart_toEndOf="@+id/radioButton5"
+            tools:layout_editor_absoluteY="228dp" />
+
+    </RadioGroup>
+
+    <RadioGroup
+
+        android:id="@+id/radioGroup3"
+        android:layout_width="wrap_content"
+        android:layout_height="54dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginLeft="104dp"
+        android:layout_marginTop="340dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <RadioButton
+            android:id="@+id/rb_red3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/red" />
+
+        <RadioButton
+            android:id="@+id/rb_blue3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/red" />
+
+        <RadioButton
+            android:id="@+id/rb_green3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/red" />
+    </RadioGroup>
+
+    <RadioGroup
+
+        android:id="@+id/radioGroup4"
+        android:layout_width="wrap_content"
+        android:layout_height="54dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginLeft="104dp"
+        android:layout_marginTop="470dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <RadioButton
+            android:id="@+id/rb_red4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/red" />
+
+        <RadioButton
+            android:id="@+id/rb_blue4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/red" />
+
+        <RadioButton
+            android:id="@+id/rb_green4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/red" />
+    </RadioGroup>
+
+    <RadioGroup
+
+        android:id="@+id/radioGroup5"
+        android:layout_width="wrap_content"
+        android:layout_height="54dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginLeft="104dp"
+        android:layout_marginTop="596dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <RadioButton
+            android:id="@+id/rb_red5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/red" />
+
+        <RadioButton
+            android:id="@+id/rb_blue5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/red" />
+
+        <RadioButton
+            android:id="@+id/rb_green5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/red" />
+    </RadioGroup>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

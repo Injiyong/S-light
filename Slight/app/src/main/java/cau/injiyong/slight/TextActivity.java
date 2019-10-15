@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,19 +24,18 @@ public class TextActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference myRef;
+    FirebaseAuth mAuth;
 
     TextView tvMessage;
     EditText etNewMessage;
     Button btUpdate;
-
-    String tokenID=FirebaseInstanceId.getInstance().getToken();
-    UserData UserData =new UserData();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text);
 
+        mAuth = FirebaseAuth.getInstance();
 
         tvMessage = (TextView) findViewById(R.id.tv_message);
         etNewMessage = (EditText) findViewById(R.id.et_newData);
@@ -43,7 +43,6 @@ public class TextActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("userInfo");
-
 
         //List 버튼 클릭시 list 창으로 넘어감
         Button btnNext= findViewById(R.id.bt_list);
@@ -61,10 +60,10 @@ public class TextActivity extends AppCompatActivity {
         btUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                String userID = mAuth.getUid();
                 String newMessage = etNewMessage.getText().toString();
 
-                myRef.child(tokenID).child("memo_list").push().setValue(newMessage);
+                myRef.child(userID).child("memo_list").push().setValue(newMessage);
             }
         });
 
@@ -75,10 +74,10 @@ public class TextActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-           //     String value = dataSnapshot.getValue(String.class);
+                //     String value = dataSnapshot.getValue(String.class);
                 //데이터를 화면에 출력해 준다.
-             //   tvMessage.setText(value);
-           //     Log.d(TAG, "Value is: " + value);
+                //   tvMessage.setText(value);
+                //     Log.d(TAG, "Value is: " + value);
             }
 
             @Override
@@ -89,4 +88,3 @@ public class TextActivity extends AppCompatActivity {
         });
     }
 }
-

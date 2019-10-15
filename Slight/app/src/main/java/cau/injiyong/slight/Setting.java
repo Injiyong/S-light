@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.widget.Button;
 
 
-
-
 public class Setting extends AppCompatActivity {
 
     Button button4;

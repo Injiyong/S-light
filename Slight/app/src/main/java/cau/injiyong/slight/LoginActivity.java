@@ -101,23 +101,24 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                            //유저 정보 디비에 넘기려고 추가한 부분
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            String userID = mAuth.getUid();
                             String tokenID=FirebaseInstanceId.getInstance().getToken();
                             database = FirebaseDatabase.getInstance();
                             myRef = database.getReference("userInfo");
 
 
-                            if(!TextUtils.isEmpty(tokenID)){
+                            if(!TextUtils.isEmpty(userID)){
                                 UserData UserData=new UserData();
                                 UserData.firebasekey=tokenID;
-
-                                myRef.child(tokenID).setValue(UserData);
+                                UserData.userID=userID;
+                                myRef.child(userID).setValue(UserData);
 
                             }
 
                             Toast.makeText(LoginActivity.this, "ID 생성완료", Toast.LENGTH_SHORT).show();
                             // Sign in success, update UI with the signed-in user's information
-                            //Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            //Log.d(TAG, "signInWithCredential:success")
                           //  updateUI(user);
 
 

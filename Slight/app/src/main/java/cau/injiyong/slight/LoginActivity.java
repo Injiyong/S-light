@@ -100,7 +100,11 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+<<<<<<< HEAD
                             //유저 정보 디비에 넘기려고 추가한 부분
+=======
+                           //유저 정보 디비에 넘기려고 추가한 부분
+>>>>>>> be146327b821053aa1c036b2d7cd8538efa4a2f0
                             FirebaseUser user = mAuth.getCurrentUser();
                             String userID = mAuth.getUid();
                             String tokenID=FirebaseInstanceId.getInstance().getToken();
@@ -119,7 +123,11 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "ID 생성완료", Toast.LENGTH_SHORT).show();
                             // Sign in success, update UI with the signed-in user's information
                             //Log.d(TAG, "signInWithCredential:success")
+<<<<<<< HEAD
                             //  updateUI(user);
+=======
+                          //  updateUI(user);
+>>>>>>> be146327b821053aa1c036b2d7cd8538efa4a2f0
 
 
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);

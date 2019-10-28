@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,6 +18,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class TextActivity extends AppCompatActivity {
 
@@ -26,9 +30,11 @@ public class TextActivity extends AppCompatActivity {
     DatabaseReference myRef;
     FirebaseAuth mAuth;
 
-    TextView tvMessage;
     EditText etNewMessage;
     Button btUpdate;
+
+    String strDate;
+    TextView Datepick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +43,6 @@ public class TextActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        tvMessage = (TextView) findViewById(R.id.tv_message);
         etNewMessage = (EditText) findViewById(R.id.et_newData);
         btUpdate = (Button) findViewById(R.id.bt_update);
 
@@ -45,7 +50,7 @@ public class TextActivity extends AppCompatActivity {
         myRef = database.getReference("userInfo");
 
         //List 버튼 클릭시 list 창으로 넘어감
-        Button btnNext= findViewById(R.id.bt_list);
+        FloatingActionButton btnNext= findViewById(R.id.bt_list);
         btnNext.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -86,5 +91,11 @@ public class TextActivity extends AppCompatActivity {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
+
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm", java.util.Locale.getDefault());
+        strDate = dateFormat.format(date);
+        Datepick = (TextView) findViewById(R.id.date);
+        Datepick.setText(strDate);
     }
 }

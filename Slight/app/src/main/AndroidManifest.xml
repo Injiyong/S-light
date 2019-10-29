@@ -12,9 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".TestAdapter"></activity>
-        <activity android:name=".RecyclerViewA" />
-        <activity android:name=".TextList" />
+        <activity android:name=".TextItem"></activity>
+        <activity android:name=".ChangeColor" />
         <activity android:name=".Setting" />
 
         <meta-data

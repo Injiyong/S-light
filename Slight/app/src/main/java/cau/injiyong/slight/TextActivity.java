@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,7 @@ import java.util.Date;
 public class TextActivity extends AppCompatActivity {
 
     private static final String TAG = "TextActivity";
+    private final int m_nMaxLengthOfDeviceName = 500;
 
     FirebaseDatabase database;
     DatabaseReference myRef;
@@ -50,25 +52,30 @@ public class TextActivity extends AppCompatActivity {
         myRef = database.getReference("userInfo");
 
         //List 버튼 클릭시 list 창으로 넘어감
-        FloatingActionButton btnNext= findViewById(R.id.bt_list);
-        btnNext.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v ){
-                Intent intent=new Intent(getApplicationContext(),MemoList.class);
-                startActivity(intent);
-            }
-        });
+//        FloatingActionButton btnNext= findViewById(R.id.bt_list);
+//        btnNext.setOnClickListener(new View.OnClickListener(){
+//
+//            @Override
+//            public void onClick(View v ){
+//                Intent intent=new Intent(getApplicationContext(),MemoList.class);
+//                startActivity(intent);
+//            }
+//        });
 
 
         //버튼 이벤트
         btUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                etNewMessage.setFilters(new InputFilter[] { new InputFilter.LengthFilter(m_nMaxLengthOfDeviceName) });
+
                 String userID = mAuth.getUid();
                 String newMessage = etNewMessage.getText().toString();
+                TextItem mMessage = new TextItem(newMessage, strDate, null);
 
-                myRef.child(userID).child("memo_list").push().setValue(newMessage);
+                myRef.child(userID).child("memo_list").push().setValue(mMessage); // 원래 newMessage
+                Intent intent=new Intent(getApplicationContext(),MemoList.class);
+                startActivity(intent);
             }
         });
 
@@ -97,5 +104,6 @@ public class TextActivity extends AppCompatActivity {
         strDate = dateFormat.format(date);
         Datepick = (TextView) findViewById(R.id.date);
         Datepick.setText(strDate);
+
     }
 }

@@ -38,6 +38,15 @@ public class MainActivity extends AppCompatActivity {
 //        TextView tvNickname = findViewById(R.id.tvNickname);
 //        ImageView ivProfile = findViewById(R.id.ivProfile);
         Button btnLogout = findViewById(R.id.btnLogout);
+        Button btncolor = findViewById(R.id.btncolor);
+        btncolor.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v ){
+                Intent intent=new Intent(getApplicationContext(),ChangeColor.class);
+                startActivity(intent);
+            }
+        });
 //        Button btnSignout = findViewById(R.id.btnSignout);
 
 //        TextView tvEmail = findViewById(R.id.tvEmail);
@@ -67,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v ){
-                Intent intent=new Intent(getApplicationContext(),TextList.class);
+                Intent intent=new Intent(getApplicationContext(),MemoList.class);
                 startActivity(intent);
             }
                                    });

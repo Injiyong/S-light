@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -74,8 +75,11 @@ public class TextActivity extends AppCompatActivity {
                 TextItem mMessage = new TextItem(newMessage, strDate, null);
 
                 myRef.child(userID).child("memo_list").push().setValue(mMessage); // 원래 newMessage
-                Intent intent=new Intent(getApplicationContext(),MemoList.class);
+                Intent intent=new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
+                finish();
+
+                Toast.makeText(TextActivity.this, "등록완료", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -104,6 +108,5 @@ public class TextActivity extends AppCompatActivity {
         strDate = dateFormat.format(date);
         Datepick = (TextView) findViewById(R.id.date);
         Datepick.setText(strDate);
-
     }
 }

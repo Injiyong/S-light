@@ -1,6 +1,8 @@
 package cau.injiyong.slight;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.view.View;
 import android.os.Bundle;
 import android.widget.Button;
@@ -24,6 +26,8 @@ public class Setting extends AppCompatActivity {
         button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
+                Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
                 finish();                                                                                           //finish() 현재 엑티비티(화면)을 종료하는 메소드이다.
             }
         });

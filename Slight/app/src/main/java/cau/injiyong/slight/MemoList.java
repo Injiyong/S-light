@@ -73,6 +73,7 @@ public class MemoList extends AppCompatActivity {
             public void onClick(View v ){
                 Intent intent=new Intent(getApplicationContext(),TextActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

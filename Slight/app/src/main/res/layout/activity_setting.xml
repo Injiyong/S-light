@@ -34,10 +34,10 @@
 
     <RadioGroup
         android:id="@+id/rgJoy"
-        android:layout_width="260dp"
+        android:layout_width="290dp"
         android:layout_height="44dp"
-        android:layout_marginRight="53dp"
-        android:layout_marginTop="67dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginTop="86dp"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -45,29 +45,31 @@
 
         <RadioButton
             android:id="@+id/rbJoy1"
-            android:layout_width="102dp"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="OnClickHandlerPurple"/>
 
         <RadioButton
             android:id="@+id/rbJoy2"
-            android:layout_width="89dp"
-            android:layout_height="44dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="OnClickHandlerBlue"/>
 
         <RadioButton
             android:id="@+id/rbJoy3"
-            android:layout_width="54dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
     </RadioGroup>
 
     <RadioGroup
         android:id="@+id/rgSad"
-        android:layout_width="261dp"
+        android:layout_width="290dp"
         android:layout_height="44dp"
-        android:layout_marginRight="53dp"
-        android:layout_marginTop="164dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginTop="203dp"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -75,29 +77,31 @@
 
         <RadioButton
             android:id="@+id/rbSad1"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="OnClickHandlerPink"/>
 
         <RadioButton
             android:id="@+id/rbSad2"
-            android:layout_width="89dp"
-            android:layout_height="44dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="OnClickHandlerOrange"/>
 
         <RadioButton
             android:id="@+id/rbSad3"
             android:layout_width="wrap_content"
-            android:layout_height="44dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1" />
     </RadioGroup>
 
     <RadioGroup
         android:id="@+id/rgAnger"
-        android:layout_width="259dp"
-        android:layout_height="43dp"
-        android:layout_marginRight="53dp"
-        android:layout_marginTop="263dp"
+        android:layout_width="290dp"
+        android:layout_height="44dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginTop="322dp"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -105,14 +109,15 @@
 
         <RadioButton
             android:id="@+id/rbAnger1"
-            android:layout_width="97dp"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="OnClickHandlerGreen"/>
 
         <RadioButton
             android:id="@+id/rbAnger2"
-            android:layout_width="57dp"
-            android:layout_height="43dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="OnClickHandlerBlue"/>
 
@@ -126,10 +131,10 @@
 
     <RadioGroup
         android:id="@+id/rgFear"
-        android:layout_width="264dp"
+        android:layout_width="290dp"
         android:layout_height="44dp"
-        android:layout_marginRight="51dp"
-        android:layout_marginTop="361dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginTop="438dp"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -137,31 +142,31 @@
 
         <RadioButton
             android:id="@+id/rbFear1"
-            android:layout_width="61dp"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="OnClickHandlerOrange"/>
 
         <RadioButton
             android:id="@+id/rbFear2"
-            android:layout_width="49dp"
-            android:layout_height="44dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="OnClickHandlerGreen"/>
 
         <RadioButton
             android:id="@+id/rbFear3"
             android:layout_width="wrap_content"
-            android:layout_height="44dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1" />
     </RadioGroup>
 
     <RadioGroup
         android:id="@+id/rgDisgust"
-        android:layout_width="267dp"
-        android:layout_height="46dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="458dp"
+        android:layout_width="290dp"
+        android:layout_height="44dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginTop="555dp"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -169,44 +174,46 @@
 
         <RadioButton
             android:id="@+id/rbDisgust1"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="OnClickHandlerBlue"/>
 
         <RadioButton
             android:id="@+id/rbDisgust2"
-            android:layout_width="90dp"
-            android:layout_height="46dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="OnClickHandlerPurple"/>
 
         <RadioButton
             android:id="@+id/rbDisgust3"
             android:layout_width="wrap_content"
-            android:layout_height="46dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1" />
     </RadioGroup>
 
     <RadioGroup
         android:id="@+id/rgRestless"
-        android:layout_width="265dp"
-        android:layout_height="45dp"
+        android:layout_width="290dp"
+        android:layout_height="44dp"
         android:orientation="horizontal"
-        android:layout_marginRight="51dp"
-        android:layout_marginTop="551dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginTop="665dp"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
         <RadioButton
             android:id="@+id/rbRestless1"
-            android:layout_width="65dp"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="OnClickHandlerYellow"/>
 
         <RadioButton
             android:id="@+id/rbRestless2"
-            android:layout_width="52dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="OnClickHandlerOrange"/>

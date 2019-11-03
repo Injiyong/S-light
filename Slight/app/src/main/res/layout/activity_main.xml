@@ -152,17 +152,17 @@
     <!--        app:layout_constraintLeft_toLeftOf="parent" />-->
     // 여기부터.
 
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="140dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="405dp"
-        android:text="Logout"
-        app:layout_constraintBottom_toTopOf="@+id/seekBar1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <Button-->
+<!--        android:id="@+id/btnLogout"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="140dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginBottom="405dp"-->
+<!--        android:text="Logout"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/seekBar1"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <Button
         android:id="@+id/btnNext"
@@ -199,7 +199,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="185dp"
-        android:layout_marginTop="210dp"
+        android:layout_marginTop="230dp"
         android:scaleX="2.3"
         android:scaleY="2.3"
         android:thumbTint="#FFFFFF"
@@ -211,7 +211,7 @@
         android:id="@+id/btncolor"
         android:layout_width="72dp"
         android:layout_height="38dp"
-        android:layout_marginTop="380dp"
+        android:layout_marginBottom="170dp"
         android:text="색변경"
         android:textSize="16sp"
 
@@ -219,13 +219,13 @@
         app:layout_constraintHorizontal_bias="0.129"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <Button
         android:id="@+id/btnbright"
         android:layout_width="72dp"
         android:layout_height="38dp"
-        android:layout_marginTop="456dp"
+        android:layout_marginBottom="232dp"
         android:text="밝기"
         android:textSize="16sp"
 
@@ -233,13 +233,13 @@
         app:layout_constraintHorizontal_bias="0.129"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
     <SeekBar
         android:id="@+id/seekBar1"
         android:layout_width="247dp"
-        android:layout_height="0dp"
+        android:layout_height="10dp"
         android:layout_marginStart="124dp"
         android:layout_marginLeft="124dp"
         android:layout_marginBottom="243dp"
@@ -247,7 +247,7 @@
         android:progress="50"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogout" />
+         />
 
     <!--    <SeekBar-->
     <!--        android:id="@+id/brightnessBar"-->

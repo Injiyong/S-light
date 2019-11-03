@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //        TextView tvNickname = findViewById(R.id.tvNickname);
 //        ImageView ivProfile = findViewById(R.id.ivProfile);
-        Button btnLogout = findViewById(R.id.btnLogout);
+//        Button btnLogout = findViewById(R.id.btnLogout);
         Button btncolor = findViewById(R.id.btncolor);
         btncolor.setOnClickListener(new View.OnClickListener(){
 
@@ -95,12 +95,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        btnLogout.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Toast.makeText(getApplicationContext(), "정상적으로 로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
-
+//        btnLogout.setOnClickListener(new Button.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FirebaseAuth.getInstance().signOut();
+//                Toast.makeText(getApplicationContext(), "정상적으로 로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
+//
 
 //                UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
 //                    @Override
@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity {
 //                        startActivity(intent);
 //                    }
 //                });
-            }
-        });
+//            }
+//        });
 //
 //        btnSignout.setOnClickListener(new Button.OnClickListener() {
 //            @Override

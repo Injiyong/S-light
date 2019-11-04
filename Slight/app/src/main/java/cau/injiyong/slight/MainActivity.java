@@ -14,6 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -23,7 +26,6 @@ import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.UnLinkResponseCallback;
-
 import android.graphics.Color;
 import android.widget.RelativeLayout;
 import android.graphics.Color;
@@ -36,12 +38,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     androidx.constraintlayout.widget.ConstraintLayout relative_color;
     Button btncolor;
     int color;
-
+    TextView textview;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         relative_color = (androidx.constraintlayout.widget.ConstraintLayout)findViewById(R.id.relative_color);
+
+        if (! Python.isStarted())
+            Python.start(new AndroidPlatform(this));
+
+        Python py = Python.getInstance();
+        PyObject pyf = py.getModule("myscript"); // py file name
+        PyObject obj = pyf.callAttr("test"); // def name in py file
+        textview = findViewById(R.id.pytext);
+        textview.setText(obj.toString());
+
         btncolor = (Button)findViewById(R.id.btncolor);
         btncolor.setOnClickListener(this);
 
@@ -86,8 +98,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("color", color).commit();
         relative_color.setBackgroundColor(color);
     }
-
-
-
-
 }

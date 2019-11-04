@@ -31,5 +31,4 @@
         <activity android:name=".TextActivity" />
         <activity android:name=".MemoList" />
     </application>
-
 </manifest>

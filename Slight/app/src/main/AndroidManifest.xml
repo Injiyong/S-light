@@ -11,9 +11,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".Setting"></activity>
-
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".TextItem"></activity>
+        <activity android:name=".ChangeColor" />
+        <activity android:name=".Setting" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -28,7 +29,6 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".TextActivity" />
-        <activity android:name=".MemoList"></activity>
+        <activity android:name=".MemoList" />
     </application>
-
 </manifest>

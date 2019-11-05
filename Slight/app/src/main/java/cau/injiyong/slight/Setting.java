@@ -2,6 +2,7 @@ package cau.injiyong.slight;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+<<<<<<< HEAD
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,11 +16,18 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+=======
+import android.content.Intent;
+import android.view.View;
+import android.os.Bundle;
+import android.widget.Button;
+>>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.Toast;
+<<<<<<< HEAD
 
 public class Setting extends AppCompatActivity implements View.OnClickListener, ColorPickerDialog.OnColorChangedListener {
 
@@ -30,14 +38,18 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
     Button btnChange[]=new Button[6];
 
 
+=======
+>>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
 
+    Button button4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
 
+<<<<<<< HEAD
         btnChange[0] = (Button) findViewById(R.id.rbAnger3);
         btnChange[1] = (Button) findViewById(R.id.rbDisgust3);
         btnChange[2] = (Button) findViewById(R.id.rbFear3);
@@ -50,6 +62,8 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
         for(int i=0;i<6;i++)
             btnChange[i].setOnClickListener(this);
 
+=======
+>>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         button4=(Button) findViewById(R.id.exit);
         button4.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +118,7 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
         builder.setTitle("노랑").setMessage("의욕이 저하됐을때 도움을 줍니다. 결단력을 일꺠워주기도합니다");
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+<<<<<<< HEAD
     }
 
 
@@ -158,5 +173,7 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
         Drawable drawable =  getResources().getDrawable(drawableResId);
         drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
         return drawable;
+=======
+>>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
     }
 }

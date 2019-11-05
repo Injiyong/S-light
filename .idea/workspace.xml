@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="4938e391-e59c-4a8a-bcce-6c2d3966a60a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/Slight/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Slight/.idea/codeStyles/Project.xml" beforeDir="false" />
@@ -153,6 +154,9 @@
       <change beforePath="$PROJECT_DIR$/Slight/settings.gradle" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Team Introduction.txt" beforeDir="false" />
     </list>
+=======
+    <list default="true" id="52de8cc5-5557-46ed-b757-40aa82f219e6" name="Default Changelist" comment="" />
+>>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,6 +166,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+<<<<<<< HEAD
   <component name="ProjectFrameBounds">
     <option name="x" value="40" />
     <option name="y" value="24" />
@@ -169,19 +174,37 @@
     <option name="height" value="781" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+=======
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="620" />
+    <option name="width" value="1250" />
+    <option name="height" value="1040" />
+  </component>
+>>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+<<<<<<< HEAD
       <pane id="Scope" />
       <pane id="ProjectPane" />
+=======
+      <pane id="ProjectPane" />
+      <pane id="Scope" />
+>>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
       <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+<<<<<<< HEAD
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+=======
+    <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+>>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -200,18 +223,32 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
+<<<<<<< HEAD
       <changelist id="4938e391-e59c-4a8a-bcce-6c2d3966a60a" name="Default Changelist" comment="" />
       <created>1572354626277</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1572354626277</updated>
+=======
+      <changelist id="52de8cc5-5557-46ed-b757-40aa82f219e6" name="Default Changelist" comment="" />
+      <created>1572769798516</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1572769798516</updated>
+>>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
     </task>
     <servers />
   </component>
   <component name="ToolWindowManager">
+<<<<<<< HEAD
     <frame x="40" y="24" width="1400" height="781" extended-state="0" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" visible="true" weight="0.32994923" />
+=======
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" visible="true" weight="0.32980832" />
+>>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
       <window_info id="Structure" side_tool="true" />
       <window_info id="Image Layers" />
       <window_info id="Designer" />

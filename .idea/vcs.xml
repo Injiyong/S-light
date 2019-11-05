@@ -2,6 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+<<<<<<< HEAD
     <mapping directory="$PROJECT_DIR$/S-light" vcs="Git" />
+=======
+>>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
   </component>
 </project>

@@ -6,11 +6,9 @@
     android:layout_height="match_parent"
     android:background="@drawable/set"
     android:orientation="vertical"
-    android:background="@drawable/set"
     tools:context=".Setting">
 
 
-<<<<<<< HEAD
     <!--    <androidx.constraintlayout.widget.Barrier-->
     <!--        android:id="@+id/barrier"-->
     <!--        android:layout_width="wrap_content"-->
@@ -22,21 +20,6 @@
     <!--        tools:layout_editor_absoluteX="318dp"-->
     <!--        tools:layout_editor_absoluteY="676dp" />-->
 
-=======
-
-
-    <!--    <androidx.constraintlayout.widget.Barrier-->
-    <!--        android:id="@+id/barrier"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:barrierDirection="left"-->
-    <!--        tools:layout_editor_absoluteX="411dp" />-->
-
-
-    <!--        tools:layout_editor_absoluteX="318dp"-->
-    <!--        tools:layout_editor_absoluteY="676dp" />-->
-
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
     <Button
         android:id="@+id/exit"
         android:layout_width="wrap_content"
@@ -45,7 +28,6 @@
         android:layout_marginBottom="11dp"
         android:text="완료"
         app:layout_constraintBottom_toBottomOf="parent"
-<<<<<<< HEAD
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
@@ -64,57 +46,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-=======
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <RadioGroup
-        android:id="@+id/rgJoy"
-        android:layout_width="290dp"
-        android:layout_height="44dp"
-        android:layout_marginRight="35dp"
-        android:layout_marginTop="86dp"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:orientation="horizontal">
-
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
         <RadioButton
             android:id="@+id/rbJoy1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:onClick="OnClickHandlerPurple" />
-=======
-            android:onClick="OnClickHandlerPurple"/>
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbJoy2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:onClick="OnClickHandlerBlue" />
-=======
-            android:onClick="OnClickHandlerBlue"/>
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbJoy3"
             android:layout_width="wrap_content"
-<<<<<<< HEAD
             android:layout_height="wrap_content" />
-=======
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
     </RadioGroup>
 
     <RadioGroup
         android:id="@+id/rgSad"
-<<<<<<< HEAD
         android:layout_width="0dp"
         android:layout_height="160dp"
         android:layout_marginStart="91dp"
@@ -127,53 +80,29 @@
         app:layout_constraintEnd_toStartOf="@+id/imageView2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-=======
-        android:layout_width="290dp"
-        android:layout_height="44dp"
-        android:layout_marginRight="35dp"
-        android:layout_marginTop="203dp"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:orientation="horizontal">
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbSad1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:onClick="OnClickHandlerPink" />
-=======
-            android:onClick="OnClickHandlerPink"/>
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbSad2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:onClick="OnClickHandlerOrange" />
-=======
-            android:onClick="OnClickHandlerOrange"/>
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbSad3"
             android:layout_width="wrap_content"
-<<<<<<< HEAD
             android:layout_height="wrap_content" />
-=======
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
     </RadioGroup>
 
     <RadioGroup
         android:id="@+id/rgAnger"
-<<<<<<< HEAD
         android:layout_width="220dp"
         android:layout_height="44dp"
         android:layout_marginTop="272dp"
@@ -182,54 +111,30 @@
         android:orientation="horizontal"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-=======
-        android:layout_width="290dp"
-        android:layout_height="44dp"
-        android:layout_marginRight="35dp"
-        android:layout_marginTop="322dp"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:orientation="horizontal">
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbAnger1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:onClick="OnClickHandlerGreen" />
-=======
-            android:onClick="OnClickHandlerGreen"/>
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbAnger2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:onClick="OnClickHandlerBlue" />
-=======
-            android:onClick="OnClickHandlerBlue"/>
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbAnger3"
             android:layout_width="wrap_content"
-<<<<<<< HEAD
             android:layout_height="wrap_content" />
-=======
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
     </RadioGroup>
 
     <RadioGroup
         android:id="@+id/rgFear"
-<<<<<<< HEAD
         android:layout_width="0dp"
         android:layout_height="44dp"
         android:layout_marginStart="91dp"
@@ -242,53 +147,29 @@
         app:layout_constraintEnd_toStartOf="@+id/imageView4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-=======
-        android:layout_width="290dp"
-        android:layout_height="44dp"
-        android:layout_marginRight="35dp"
-        android:layout_marginTop="438dp"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:orientation="horizontal">
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbFear1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:onClick="OnClickHandlerOrange" />
-=======
-            android:onClick="OnClickHandlerOrange"/>
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbFear2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:onClick="OnClickHandlerGreen" />
-=======
-            android:onClick="OnClickHandlerGreen"/>
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbFear3"
             android:layout_width="wrap_content"
-<<<<<<< HEAD
             android:layout_height="wrap_content" />
-=======
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
     </RadioGroup>
 
     <RadioGroup
         android:id="@+id/rgDisgust"
-<<<<<<< HEAD
         android:layout_width="0dp"
         android:layout_height="44dp"
         android:layout_marginStart="91dp"
@@ -301,53 +182,29 @@
         app:layout_constraintEnd_toStartOf="@+id/imageView5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-=======
-        android:layout_width="290dp"
-        android:layout_height="44dp"
-        android:layout_marginRight="35dp"
-        android:layout_marginTop="555dp"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:orientation="horizontal">
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbDisgust1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:onClick="OnClickHandlerBlue" />
-=======
-            android:onClick="OnClickHandlerBlue"/>
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbDisgust2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:onClick="OnClickHandlerPurple" />
-=======
-            android:onClick="OnClickHandlerPurple"/>
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbDisgust3"
             android:layout_width="wrap_content"
-<<<<<<< HEAD
             android:layout_height="wrap_content" />
-=======
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
     </RadioGroup>
 
     <RadioGroup
         android:id="@+id/rgRestless"
-<<<<<<< HEAD
         android:layout_width="0dp"
         android:layout_height="44dp"
         android:layout_marginStart="91dp"
@@ -361,48 +218,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-=======
-        android:layout_width="290dp"
-        android:layout_height="44dp"
-        android:orientation="horizontal"
-        android:layout_marginRight="35dp"
-        android:layout_marginTop="665dp"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
         <RadioButton
             android:id="@+id/rbRestless1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:onClick="OnClickHandlerYellow" />
-=======
-            android:onClick="OnClickHandlerYellow"/>
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbRestless2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:onClick="OnClickHandlerOrange" />
-=======
-            android:onClick="OnClickHandlerOrange"/>
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
         <RadioButton
             android:id="@+id/rbRestless3"
             android:layout_width="wrap_content"
-<<<<<<< HEAD
             android:layout_height="wrap_content" />
-=======
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
->>>>>>> 93ebb71291eebf19f684a0ecdc71f8f1a7c46835
 
     </RadioGroup>
 

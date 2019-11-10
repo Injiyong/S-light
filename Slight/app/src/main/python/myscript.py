@@ -1,2 +1,5 @@
+import numpy as np
+
 def test():
-    return "hello"
+    a = np.exp(1)
+    return str(a)

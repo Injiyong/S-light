@@ -42,7 +42,7 @@ public class ColorPickerDialog extends Dialog {
             mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             mPaint.setShader(s);
             mPaint.setStyle(Paint.Style.STROKE);
-            mPaint.setStrokeWidth(70);
+            mPaint.setStrokeWidth(150);
 
             mCenterPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             mCenterPaint.setColor(color);
@@ -56,6 +56,7 @@ public class ColorPickerDialog extends Dialog {
         protected void onDraw(Canvas canvas) {
             float r = CENTER_X - mPaint.getStrokeWidth() * 0.5f;
 
+          //  canvas.drawColor(Color.rgb(64,64,64));
             canvas.translate(CENTER_X, CENTER_X);
             canvas.drawOval(new RectF(-r, -r, r, r), mPaint);
             canvas.drawCircle(0, 0, CENTER_RADIUS, mCenterPaint);
@@ -83,9 +84,9 @@ public class ColorPickerDialog extends Dialog {
             setMeasuredDimension(CENTER_X * 2, CENTER_Y * 2);
         }
 
-        private static final int CENTER_X = 200;
-        private static final int CENTER_Y = 200;
-        private static final int CENTER_RADIUS = 50;
+        private static final int CENTER_X = 400;
+        private static final int CENTER_Y = 400;
+        private static final int CENTER_RADIUS = 90;
 
         private int floatToByte(float x) {
             int n = java.lang.Math.round(x);

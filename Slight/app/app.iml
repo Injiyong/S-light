@@ -103,7 +103,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test:runner:1.2.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test:monitor:1.2.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test.espresso:espresso-idling-resource:3.2.0@aar" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:/Users/Jiyeon/.gradle/caches/modules-2/files-2.1/com.chaquo.python.runtime/chaquopy_java/6.3.0/ce7598ddebca3c8844d71db01db4e5c81a8dc102/chaquopy_java-6.3.0.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\JJy\.gradle\caches\modules-2\files-2.1\com.chaquo.python.runtime\chaquopy_java\6.3.0\ce7598ddebca3c8844d71db01db4e5c81a8dc102\chaquopy_java-6.3.0.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.collection:collection:1.1.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.arch.core:core-common:2.1.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-common:2.1.0@jar" level="project" />

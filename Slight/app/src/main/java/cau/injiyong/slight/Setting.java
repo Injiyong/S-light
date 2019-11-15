@@ -157,6 +157,7 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
 
 
 
+        button4=(Button) findViewById(R.id.exit);
         button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){

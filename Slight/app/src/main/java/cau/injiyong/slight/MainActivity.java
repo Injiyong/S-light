@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -20,6 +21,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -103,6 +105,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SpeechRecognizer mRecognizer;
     TextView txt;
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
+
+    private boolean flag_BackKey = false;                //BACK KEY가 눌려졌는지에 대한 FLAG 로 사용됩니다.
+    private long currentTime = 0;                          // Time(Millis) Interval을 계산합니다.
+    private static final int MSG_TIMER = 1;              // Switch문에서 사용하게 되는 Key값입니다.
+    private static final int BACKKEY_TIMEOUT = 2;    // Interval을 정의합니다.
+    private static final int IN_MILLISEC = 1000;        // Millis를 정의합니다.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Python py = Python.getInstance();
         PyObject pyf = py.getModule("myscript"); // py file name
-        PyObject obj = pyf.callAttr("test"); // def name in py file
+        PyObject obj = pyf.callAttr("test", "하이하이"); // def name in py file
         textview = findViewById(R.id.pytext);
         textview.setText(obj.toString());
 
@@ -217,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
-
+        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, new Long(5000));
         mRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
         mRecognizer.setRecognitionListener(recognitionListener);
 
@@ -395,7 +403,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            } catch (IOException e) {
 //                Toast.makeText(getApplicationContext(), "데이터 전송 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
 //            }
-            Log.d(TAG, "...Data to send: " + str + "...");
+            //Log.d(TAG, "...Data to send: " + str + "...");
             byte[] msgBuffer = str.getBytes();
             try {
                 mmOutStream.write(msgBuffer);
@@ -403,6 +411,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d(TAG, "...Error data send: " + e.getMessage() + "...");
             }
         }
+
+        void sendData(String msg) {
+            msg += "\n";  // 문자열 종료표시 (\n)
+            try{
+                // getBytes() : String을 byte로 변환
+                // OutputStream.write : 데이터를 쓸때는 write(byte[]) 메소드를 사용함.
+                // byte[] 안에 있는 데이터를 한번에 기록해 준다.
+                mmOutStream.write(msg.getBytes());  // 문자열 전송.
+            }catch(Exception e) {  // 문자열 전송 도중 오류가 발생한 경우
+                Toast.makeText(getApplicationContext(), "데이터 전송중 오류가 발생",
+                        Toast.LENGTH_LONG).show();
+                finish();  // App 종료
+            }
+        }
+
+
         public void cancel() {
             try {
                 mmSocket.close();
@@ -421,9 +445,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void colorChanged(int color) {
+
         PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("color", color).commit();
         relative_color.setBackgroundColor(color);
 
+        mThreadConnectedBluetooth.sendData("3");
+
+        String r=String.format("%s",Color.red(color));
+        mThreadConnectedBluetooth.sendData(r);
+        String g=String.format("%s",Color.green(color));
+        mThreadConnectedBluetooth.sendData(g);
+        String b=String.format("%s",Color.blue(color));
+        mThreadConnectedBluetooth.sendData(b);
+
+        //txt.setText("r =" + r + " g =" + g + " b=" + b);
         String hexColor = String.format("#%06X", (0xFFFFFF & color));
         String userID = mAuth.getUid();
         myRef.child(userID).child("current_color").setValue(hexColor);
@@ -437,6 +472,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onBeginningOfSpeech() {
+            //Toast.makeText(getApplicationContext(), "말이 시작된 부분", Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -453,8 +489,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onError(int i) {
-            txt.setText("너무 늦게 말하면 오류뜹니다");
-
+            txt.setText("너무 늦게 말하면 오류뜹니다.");
         }
 
         @Override
@@ -476,5 +511,66 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onEvent(int i, Bundle bundle) {
         }
+    };
+
+    @Override
+    public void onBackPressed(){            //BACK키가 눌렸을 때의 함수로 Override하여 사용합니다.
+
+        if ( flag_BackKey == false ){
+
+            // 첫 번째로 클릭했을 경우로, false에서 true로 바꿔줍니다.
+
+            flag_BackKey = true;
+
+
+
+            currentTime = Calendar.getInstance().getTimeInMillis();       //Java의 Calendar를 import하여 사용합니다.
+
+            Toast.makeText(this, "\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+
+            startTimer();
+
+        }else{            //만약 BACKKey의 플래그가 현재 false가 아닌, true 라면 아래를 수행합니다.
+
+            // second click : 2초 이내면 종료! 아니면 아무것도 안한다.
+
+            flag_BackKey = false;
+
+            if ( Calendar.getInstance().getTimeInMillis() <= (currentTime + (BACKKEY_TIMEOUT * IN_MILLISEC )) ) {
+
+                finish();                //currentTime + 2000 (2초) 이므로, 2초 안에 클릭 했을 때, MainActivity를 종료해주는 부분입니다.
+
+            }
+
+        }
+
+    }
+
+    private void startTimer() {                                    //2초의 시간적 여유를 가지도록 Delay 시킵니다.
+
+        backTimerHandler.sendEmptyMessageDelayed(MSG_TIMER , BACKKEY_TIMEOUT * IN_MILLISEC );
+
+    }
+
+
+
+    private Handler backTimerHandler = new Handler(){
+
+        public void handleMessage(Message msg){
+
+            switch( msg.what ){                //msg의 값이 무엇인지 파악하여 만약 MSG_TIMER라면, flag를 다시 false로 해줍니다.
+
+                case MSG_TIMER :{
+
+                    flag_BackKey = false;
+
+                }
+
+                break;
+
+            }
+
+        }
+
     };
 }

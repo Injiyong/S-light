@@ -37,6 +37,10 @@ import com.kakao.usermgmt.callback.UnLinkResponseCallback;
 import com.kakao.usermgmt.response.MeV2Response;
 import com.kakao.util.OptionalBoolean;
 import com.kakao.util.exception.KakaoException;
+import java.util.Calendar;
+import android.os.Message;
+import android.os.Handler;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -47,6 +51,13 @@ public class LoginActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference myRef;
+
+    private boolean flag_BackKey = false;                //BACK KEY가 눌려졌는지에 대한 FLAG 로 사용됩니다.
+    private long currentTime = 0;                          // Time(Millis) Interval을 계산합니다.
+    private static final int MSG_TIMER = 1;              // Switch문에서 사용하게 되는 Key값입니다.
+    private static final int BACKKEY_TIMEOUT = 2;    // Interval을 정의합니다.
+    private static final int IN_MILLISEC = 1000;        // Millis를 정의합니다.
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        SignInButton button = (SignInButton)findViewById(R.id.login_button);
+        SignInButton button = (SignInButton) findViewById(R.id.login_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,6 +82,67 @@ public class LoginActivity extends AppCompatActivity {
 //        Session.getCurrentSession().addCallback(sessionCallback);
 //        Session.getCurrentSession().checkAndImplicitOpen();
     }
+
+    @Override
+    public void onBackPressed(){            //BACK키가 눌렸을 때의 함수로 Override하여 사용합니다.
+
+        if ( flag_BackKey == false ){
+
+            // 첫 번째로 클릭했을 경우로, false에서 true로 바꿔줍니다.
+
+            flag_BackKey = true;
+
+
+
+            currentTime = Calendar.getInstance().getTimeInMillis();       //Java의 Calendar를 import하여 사용합니다.
+
+            Toast.makeText(this, "\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+
+            startTimer();
+
+        }else{            //만약 BACKKey의 플래그가 현재 false가 아닌, true 라면 아래를 수행합니다.
+
+            // second click : 2초 이내면 종료! 아니면 아무것도 안한다.
+
+            flag_BackKey = false;
+
+            if ( Calendar.getInstance().getTimeInMillis() <= (currentTime + (BACKKEY_TIMEOUT * IN_MILLISEC )) ) {
+
+                finish();                //currentTime + 2000 (2초) 이므로, 2초 안에 클릭 했을 때, MainActivity를 종료해주는 부분입니다.
+
+            }
+
+        }
+
+    }
+
+    private void startTimer() {                                    //2초의 시간적 여유를 가지도록 Delay 시킵니다.
+
+        backTimerHandler.sendEmptyMessageDelayed(MSG_TIMER , BACKKEY_TIMEOUT * IN_MILLISEC );
+
+    }
+
+
+
+    private Handler backTimerHandler = new Handler(){
+
+        public void handleMessage(Message msg){
+
+            switch( msg.what ){                //msg의 값이 무엇인지 파악하여 만약 MSG_TIMER라면, flag를 다시 false로 해줍니다.
+
+                case MSG_TIMER :{
+
+                    flag_BackKey = false;
+
+                }
+
+                break;
+
+            }
+
+        }
+
+    };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -1,3 +1,3 @@
-def test():
-    a = "hi"
+def test(a):
     return a
+

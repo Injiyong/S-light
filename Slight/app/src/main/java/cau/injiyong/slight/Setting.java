@@ -1,5 +1,6 @@
 package cau.injiyong.slight;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -10,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -41,10 +43,12 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-
+import com.google.firebase.database.ValueEventListener;
 
 
 public class Setting extends AppCompatActivity implements View.OnClickListener, ColorPickerDialog.OnColorChangedListener {
@@ -82,12 +86,20 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
 
 
 
-    RadioGroup rgSad,rgJoy,rgFear,rgAnger,rgDisgust,rgRestless;
+    RadioGroup[] rg=new RadioGroup[6];
+    Integer[] rb1=new Integer[6];
+    Integer[] rb3=new Integer[6];
+    ImageView[] tempiv=new ImageView[6];
     String[] pick=new String[6];
+    String[] emotion=new String[6];
 
     FirebaseDatabase database;
     DatabaseReference myRef;
     FirebaseAuth mAuth;
+    String userID;
+
+    String[] btnID=new String[6];
+
 
 
     @Override
@@ -95,8 +107,10 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-
-
+        mAuth = FirebaseAuth.getInstance();
+        userID = mAuth.getUid();
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("userInfo");
 
 
         mTvBluetoothStatus = (TextView)findViewById(R.id.tvBluetoothStatus);
@@ -123,17 +137,12 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
             }
         };
 
-
-
-
-        mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("userInfo");
-
-
-
-
-
+        tempiv[0] = (ImageView) findViewById(R.id.imageView);
+        tempiv[1] = (ImageView) findViewById(R.id.imageView2);
+        tempiv[2] = (ImageView) findViewById(R.id.imageView3);
+        tempiv[3] = (ImageView) findViewById(R.id.imageView4);
+        tempiv[4] = (ImageView) findViewById(R.id.imageView5);
+        tempiv[5] = (ImageView) findViewById(R.id.imageView6);
 
         btnChange[0] = (Button) findViewById(R.id.rbAnger3);
         btnChange[1] = (Button) findViewById(R.id.rbDisgust3);
@@ -142,18 +151,84 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
         btnChange[4] = (Button) findViewById(R.id.rbRestless3);
         btnChange[5] = (Button) findViewById(R.id.rbSad3);
 
+        emotion[0]="joy";
+        emotion[1]="sad";
+        emotion[2]="anger";
+        emotion[3]="fear";
+        emotion[4]="disgust";
+        emotion[5]="restless";
 
 
-        for(int i=0;i<6;i++)
+        for(int i=0;i<6;i++) {
             btnChange[i].setOnClickListener(this);
+        }
 
 
-        rgJoy=  (RadioGroup) findViewById(R.id.rgJoy);
-        rgSad = (RadioGroup) findViewById(R.id.rgSad);
-        rgAnger = (RadioGroup) findViewById(R.id.rgAnger);
-        rgDisgust = (RadioGroup) findViewById(R.id.rgDisgust);
-        rgFear = (RadioGroup) findViewById(R.id.rgFear);
-        rgRestless = (RadioGroup) findViewById(R.id.rgRestless);
+        rg[0] =  (RadioGroup) findViewById(R.id.rgJoy);
+        rg[1] = (RadioGroup) findViewById(R.id.rgSad);
+        rg[2] = (RadioGroup) findViewById(R.id.rgAnger);
+        rg[3] = (RadioGroup) findViewById(R.id.rgFear);
+        rg[4] = (RadioGroup) findViewById(R.id.rgDisgust);
+        rg[5] = (RadioGroup) findViewById(R.id.rgRestless);
+
+        rb1[0] = R.id.rbJoy1;
+        rb1[1] = R.id.rbSad1;
+        rb1[2] = R.id.rbAnger1;
+        rb1[3] = R.id.rbFear1;
+        rb1[4] = R.id.rbDisgust1;
+        rb1[5] = R.id.rbRestless1;
+
+        rb3[0] = R.id.rbJoy3;
+        rb3[1] = R.id.rbSad3;
+        rb3[2] = R.id.rbAnger3;
+        rb3[3] = R.id.rbFear3;
+        rb3[4] = R.id.rbDisgust3;
+        rb3[5] = R.id.rbRestless3;
+
+
+
+        myRef.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int temp;
+                String tempcolor;
+                int tempColor;
+
+                Log.d("dd",String.valueOf(dataSnapshot.child("button").child("joy").getValue()));
+                for(int i=0;i<6;i++)
+                    btnID[i] = String.valueOf(dataSnapshot.child("button").child(emotion[i]).getValue());
+
+                for(int i=0;i<6;i++) {
+                    if (btnID[i].equals("null"))
+                        rg[i].check(rb1[i]);
+                    else {
+                        temp = Integer.parseInt(btnID[i]);
+                        if(temp==rb3[i]){
+                            String s = String.valueOf(dataSnapshot.child("color").child(emotion[i]).getValue());
+                            if(s.equals("null")){
+                                bk(0, i);
+                            }
+                            else{
+                                bk(Integer.parseInt(s), i);
+                            }
+                            //Drawable roundDrawable = getResources().getDrawable(R.drawable.shape);
+                            //Log.d("아놔 -지연",tempcolor=String.valueOf(dataSnapshot.child("color").child(emotion[i]).getValue()))  ;
+                            //  tempColor=Integer.parseInt(tempcolor);
+                            // roundDrawable.setColorFilter(Integer.parseInt(tempcolor), PorterDuff.Mode.SRC_ATOP);
+                            // tempiv[i].setBackground(roundDrawable);
+                        }
+                        rg[i].check(temp);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
 
 
@@ -164,94 +239,112 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
 
                 String userID = mAuth.getUid();
 
-                int btnId=rgJoy.getCheckedRadioButtonId();
+                int btnId=rg[0].getCheckedRadioButtonId();
                 switch(btnId){
 
                     case R.id.rbJoy1://보라
-                        myRef.child(userID).child("color").child("joy").setValue("#8041D9");
+                        myRef.child(userID).child("color").child("joy").setValue("-5635864");
+                        myRef.child(userID).child("button").child("joy").setValue(R.id.rbJoy1);
                         break;
                     case R.id.rbJoy2://파랑
-                        myRef.child(userID).child("color").child("joy").setValue("#0054FF");
+                        myRef.child(userID).child("color").child("joy").setValue("-14451969");
+                        myRef.child(userID).child("button").child("joy").setValue(R.id.rbJoy2);
                         break;
                     case R.id.rbJoy3:
                         myRef.child(userID).child("color").child("joy").setValue(pick[0]);
+                        myRef.child(userID).child("button").child("joy").setValue(R.id.rbJoy3);
                         break;
 
                 }
 
-                btnId=rgSad.getCheckedRadioButtonId();
+                btnId=rg[1].getCheckedRadioButtonId();
                 switch(btnId){
 
                     case R.id.rbSad1://분홍
-                        myRef.child(userID).child("color").child("sad").setValue("#F361DC");
+                        myRef.child(userID).child("color").child("sad").setValue("-65324");
+                        myRef.child(userID).child("button").child("sad").setValue(R.id.rbSad1);
                         break;
                     case R.id.rbSad2://주황
-                        myRef.child(userID).child("color").child("sad").setValue("#FF5E00");
+                        myRef.child(userID).child("color").child("sad").setValue("-1245434");
+                        myRef.child(userID).child("button").child("sad").setValue(R.id.rbSad2);
                         break;
                     case R.id.rbSad3:
                         myRef.child(userID).child("color").child("sad").setValue(pick[1]);
+                        myRef.child(userID).child("button").child("sad").setValue(R.id.rbSad3);
                         break;
 
                 }
 
-                btnId=rgAnger.getCheckedRadioButtonId();
+                btnId=rg[2].getCheckedRadioButtonId();
                 switch(btnId){
 
                     case R.id.rbAnger1://초록
-                        myRef.child(userID).child("color").child("anger").setValue("#1DDB16");
+                        myRef.child(userID).child("color").child("anger").setValue("-11927752");
+                        myRef.child(userID).child("button").child("anger").setValue(R.id.rbAnger1);
                         break;
                     case R.id.rbAnger2://파랑
-                        myRef.child(userID).child("color").child("anger").setValue("#0054FF");
+                        myRef.child(userID).child("color").child("anger").setValue("-14451969");
+                        myRef.child(userID).child("button").child("anger").setValue(R.id.rbAnger2);
                         break;
                     case R.id.rbAnger3:
                         myRef.child(userID).child("color").child("anger").setValue(pick[2]);
+                        myRef.child(userID).child("button").child("anger").setValue(R.id.rbAnger3);
                         break;
 
                 }
-                btnId=rgFear.getCheckedRadioButtonId();
+                btnId=rg[3].getCheckedRadioButtonId();
                 switch(btnId){
 
                     case R.id.rbFear1://주황
-                        myRef.child(userID).child("color").child("fear").setValue("#FF5E00");
+                        myRef.child(userID).child("color").child("fear").setValue("-1245434");
+                        myRef.child(userID).child("button").child("fear").setValue(R.id.rbFear1);
                         break;
                     case R.id.rbFear2://초록
-                        myRef.child(userID).child("color").child("fear").setValue("#1DDB16");
+                        myRef.child(userID).child("color").child("fear").setValue("-11927752");
+                        myRef.child(userID).child("button").child("fear").setValue(R.id.rbFear2);
                         break;
                     case R.id.rbFear3:
                         myRef.child(userID).child("color").child("fear").setValue(pick[3]);
+                        myRef.child(userID).child("button").child("fear").setValue(R.id.rbFear3);
                         break;
 
                 }
-                btnId=rgDisgust.getCheckedRadioButtonId();
+                btnId=rg[4].getCheckedRadioButtonId();
                 switch(btnId){
 
                     case R.id.rbDisgust1://파랑
-                        myRef.child(userID).child("color").child("disgust").setValue("#0054FF");
+                        myRef.child(userID).child("color").child("disgust").setValue("-14451969");
+                        myRef.child(userID).child("button").child("disgust").setValue(R.id.rbDisgust1);
                         break;
                     case R.id.rbDisgust2://보라
-                        myRef.child(userID).child("color").child("disgust").setValue("#8041D9");
+                        myRef.child(userID).child("color").child("disgust").setValue("-5635864");
+                        myRef.child(userID).child("button").child("disgust").setValue(R.id.rbDisgust2);
                         break;
                     case R.id.rbDisgust3:
                         myRef.child(userID).child("color").child("disgust").setValue(pick[4]);
+                        myRef.child(userID).child("button").child("disgust").setValue(R.id.rbDisgust3);
                         break;
 
                 }
-                btnId=rgRestless.getCheckedRadioButtonId();
+                btnId=rg[5].getCheckedRadioButtonId();
                 switch(btnId){
 
                     case R.id.rbRestless1://노랑
-                        myRef.child(userID).child("color").child("restless").setValue("#FFE400");
+                        myRef.child(userID).child("color").child("restless").setValue("-1245434");
+                        myRef.child(userID).child("button").child("restless").setValue(R.id.rbRestless1);
                         break;
                     case R.id.rbRestless2://주황
-                        myRef.child(userID).child("color").child("restless").setValue("#FF5E00");
+                        myRef.child(userID).child("color").child("restless").setValue("-1245434");
+                        myRef.child(userID).child("button").child("restless").setValue(R.id.rbRestless2);
                         break;
                     case R.id.rbRestless3:
                         myRef.child(userID).child("color").child("restless").setValue(pick[5]);
+                        myRef.child(userID).child("button").child("restless").setValue(R.id.rbRestless3);
                         break;
 
                 }
 
-                Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent=new Intent(Setting.this,MainActivity.class);
                 startActivity(intent);
                 finish();                                                                                           //finish() 현재 엑티비티(화면)을 종료하는 메소드이다.
             }
@@ -259,6 +352,17 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
 
 
 
+    }
+
+    public void bk(int color, int i){
+        pick[i] = Integer.toString(color);
+        Drawable roundDrawable = getResources().getDrawable(R.drawable.shape);
+        roundDrawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            tempiv[i].setBackgroundDrawable(roundDrawable);
+        } else {
+            tempiv[i].setBackground(roundDrawable);
+        }
     }
 
     public void OnClickHandlerPurple(View view) {
@@ -324,21 +428,27 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
         switch(ID) {
             case R.id.rbJoy3:
                 iv = (ImageView) findViewById(R.id.imageView);
+                pick[0]=String.valueOf(color);
                 break;
             case R.id.rbSad3:
                 iv = (ImageView) findViewById(R.id.imageView2);
+                pick[1]=String.valueOf(color);
                 break;
             case R.id.rbAnger3:
                 iv = (ImageView) findViewById(R.id.imageView3);
+                pick[2]=String.valueOf(color);
                 break;
             case R.id.rbFear3:
                 iv = (ImageView) findViewById(R.id.imageView4);
+                pick[3]=String.valueOf(color);
                 break;
             case R.id.rbDisgust3:
                 iv = (ImageView) findViewById(R.id.imageView5);
+                pick[4]=String.valueOf(color);
                 break;
             case R.id.rbRestless3:
                 iv = (ImageView) findViewById(R.id.imageView6);
+                pick[5]=String.valueOf(color);
                 break;
 
         }

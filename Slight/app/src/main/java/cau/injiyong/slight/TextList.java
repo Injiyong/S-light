@@ -42,9 +42,9 @@ public class TextList extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         ArrayList<FoodInfo> foodInfoArrayList = new ArrayList<>();
-        foodInfoArrayList.add(new FoodInfo(R.drawable.voice, "5,000원"));
-        foodInfoArrayList.add(new FoodInfo(R.drawable.voice, "4,600원"));
-        foodInfoArrayList.add(new FoodInfo(R.drawable.voice, "4,000원"));
+//        foodInfoArrayList.add(new FoodInfo(R.drawable.voice, "5,000원"));
+//        foodInfoArrayList.add(new FoodInfo(R.drawable.voice, "4,600원"));
+//        foodInfoArrayList.add(new FoodInfo(R.drawable.voice, "4,000원"));
 
         MyAdapter myAdapter = new MyAdapter(foodInfoArrayList);
 

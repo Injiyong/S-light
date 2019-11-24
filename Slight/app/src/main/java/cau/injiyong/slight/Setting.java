@@ -51,16 +51,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
-public class Setting extends AppCompatActivity implements View.OnClickListener, ColorPickerDialog.OnColorChangedListener {
+public class Setting extends AppCompatActivity implements ColorPickerDialog.OnColorChangedListener {
 
     Button button4;
     int color;
     int ID;
     ImageView iv;
     Button btnChange[]=new Button[6];
-
-
-
 
     TextView mTvBluetoothStatus;
     TextView mTvReceiveData;
@@ -150,6 +147,14 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
         btnChange[3] = (Button) findViewById(R.id.rbJoy3);
         btnChange[4] = (Button) findViewById(R.id.rbRestless3);
         btnChange[5] = (Button) findViewById(R.id.rbSad3);
+        for(int i=0;i<6;i++) {
+            btnChange[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setBtnChange(view);
+                }
+            });
+        }
 
         emotion[0]="joy";
         emotion[1]="sad";
@@ -157,12 +162,6 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
         emotion[3]="fear";
         emotion[4]="disgust";
         emotion[5]="restless";
-
-
-        for(int i=0;i<6;i++) {
-            btnChange[i].setOnClickListener(this);
-        }
-
 
         rg[0] =  (RadioGroup) findViewById(R.id.rgJoy);
         rg[1] = (RadioGroup) findViewById(R.id.rgSad);
@@ -185,8 +184,6 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
         rb3[4] = R.id.rbDisgust3;
         rb3[5] = R.id.rbRestless3;
 
-
-
         myRef.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -194,11 +191,8 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
                 String tempcolor;
                 int tempColor;
 
-                Log.d("dd",String.valueOf(dataSnapshot.child("button").child("joy").getValue()));
-                for(int i=0;i<6;i++)
-                    btnID[i] = String.valueOf(dataSnapshot.child("button").child(emotion[i]).getValue());
-
                 for(int i=0;i<6;i++) {
+                    btnID[i] = String.valueOf(dataSnapshot.child("button").child(emotion[i]).getValue());
                     if (btnID[i].equals("null"))
                         rg[i].check(rb1[i]);
                     else {
@@ -211,11 +205,6 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
                             else{
                                 bk(Integer.parseInt(s), i);
                             }
-                            //Drawable roundDrawable = getResources().getDrawable(R.drawable.shape);
-                            //Log.d("아놔 -지연",tempcolor=String.valueOf(dataSnapshot.child("color").child(emotion[i]).getValue()))  ;
-                            //  tempColor=Integer.parseInt(tempcolor);
-                            // roundDrawable.setColorFilter(Integer.parseInt(tempcolor), PorterDuff.Mode.SRC_ATOP);
-                            // tempiv[i].setBackground(roundDrawable);
                         }
                         rg[i].check(temp);
                     }
@@ -230,123 +219,11 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
         });
 
 
-
-
         button4=(Button) findViewById(R.id.exit);
         button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-
-                String userID = mAuth.getUid();
-
-                int btnId=rg[0].getCheckedRadioButtonId();
-                switch(btnId){
-
-                    case R.id.rbJoy1://보라
-                        myRef.child(userID).child("color").child("joy").setValue("-5635864");
-                        myRef.child(userID).child("button").child("joy").setValue(R.id.rbJoy1);
-                        break;
-                    case R.id.rbJoy2://파랑
-                        myRef.child(userID).child("color").child("joy").setValue("-14451969");
-                        myRef.child(userID).child("button").child("joy").setValue(R.id.rbJoy2);
-                        break;
-                    case R.id.rbJoy3:
-                        myRef.child(userID).child("color").child("joy").setValue(pick[0]);
-                        myRef.child(userID).child("button").child("joy").setValue(R.id.rbJoy3);
-                        break;
-
-                }
-
-                btnId=rg[1].getCheckedRadioButtonId();
-                switch(btnId){
-
-                    case R.id.rbSad1://분홍
-                        myRef.child(userID).child("color").child("sad").setValue("-65324");
-                        myRef.child(userID).child("button").child("sad").setValue(R.id.rbSad1);
-                        break;
-                    case R.id.rbSad2://주황
-                        myRef.child(userID).child("color").child("sad").setValue("-1245434");
-                        myRef.child(userID).child("button").child("sad").setValue(R.id.rbSad2);
-                        break;
-                    case R.id.rbSad3:
-                        myRef.child(userID).child("color").child("sad").setValue(pick[1]);
-                        myRef.child(userID).child("button").child("sad").setValue(R.id.rbSad3);
-                        break;
-
-                }
-
-                btnId=rg[2].getCheckedRadioButtonId();
-                switch(btnId){
-
-                    case R.id.rbAnger1://초록
-                        myRef.child(userID).child("color").child("anger").setValue("-11927752");
-                        myRef.child(userID).child("button").child("anger").setValue(R.id.rbAnger1);
-                        break;
-                    case R.id.rbAnger2://파랑
-                        myRef.child(userID).child("color").child("anger").setValue("-14451969");
-                        myRef.child(userID).child("button").child("anger").setValue(R.id.rbAnger2);
-                        break;
-                    case R.id.rbAnger3:
-                        myRef.child(userID).child("color").child("anger").setValue(pick[2]);
-                        myRef.child(userID).child("button").child("anger").setValue(R.id.rbAnger3);
-                        break;
-
-                }
-                btnId=rg[3].getCheckedRadioButtonId();
-                switch(btnId){
-
-                    case R.id.rbFear1://주황
-                        myRef.child(userID).child("color").child("fear").setValue("-1245434");
-                        myRef.child(userID).child("button").child("fear").setValue(R.id.rbFear1);
-                        break;
-                    case R.id.rbFear2://초록
-                        myRef.child(userID).child("color").child("fear").setValue("-11927752");
-                        myRef.child(userID).child("button").child("fear").setValue(R.id.rbFear2);
-                        break;
-                    case R.id.rbFear3:
-                        myRef.child(userID).child("color").child("fear").setValue(pick[3]);
-                        myRef.child(userID).child("button").child("fear").setValue(R.id.rbFear3);
-                        break;
-
-                }
-                btnId=rg[4].getCheckedRadioButtonId();
-                switch(btnId){
-
-                    case R.id.rbDisgust1://파랑
-                        myRef.child(userID).child("color").child("disgust").setValue("-14451969");
-                        myRef.child(userID).child("button").child("disgust").setValue(R.id.rbDisgust1);
-                        break;
-                    case R.id.rbDisgust2://보라
-                        myRef.child(userID).child("color").child("disgust").setValue("-5635864");
-                        myRef.child(userID).child("button").child("disgust").setValue(R.id.rbDisgust2);
-                        break;
-                    case R.id.rbDisgust3:
-                        myRef.child(userID).child("color").child("disgust").setValue(pick[4]);
-                        myRef.child(userID).child("button").child("disgust").setValue(R.id.rbDisgust3);
-                        break;
-
-                }
-                btnId=rg[5].getCheckedRadioButtonId();
-                switch(btnId){
-
-                    case R.id.rbRestless1://노랑
-                        myRef.child(userID).child("color").child("restless").setValue("-1245434");
-                        myRef.child(userID).child("button").child("restless").setValue(R.id.rbRestless1);
-                        break;
-                    case R.id.rbRestless2://주황
-                        myRef.child(userID).child("color").child("restless").setValue("-1245434");
-                        myRef.child(userID).child("button").child("restless").setValue(R.id.rbRestless2);
-                        break;
-                    case R.id.rbRestless3:
-                        myRef.child(userID).child("color").child("restless").setValue(pick[5]);
-                        myRef.child(userID).child("button").child("restless").setValue(R.id.rbRestless3);
-                        break;
-
-                }
-
-                Intent intent=new Intent(Setting.this,MainActivity.class);
-                startActivity(intent);
-                finish();                                                                                           //finish() 현재 엑티비티(화면)을 종료하는 메소드이다.
+                complete();
             }
         });
 
@@ -410,10 +287,123 @@ public class Setting extends AppCompatActivity implements View.OnClickListener, 
         alertDialog.show();
     }
 
+    public void complete(){
+        String userID = mAuth.getUid();
+
+        int btnId=rg[0].getCheckedRadioButtonId();
+        switch(btnId){
+
+            case R.id.rbJoy1://보라
+                myRef.child(userID).child("color").child("joy").setValue("-5635864");
+                myRef.child(userID).child("button").child("joy").setValue(R.id.rbJoy1);
+                break;
+            case R.id.rbJoy2://파랑
+                myRef.child(userID).child("color").child("joy").setValue("-14451969");
+                myRef.child(userID).child("button").child("joy").setValue(R.id.rbJoy2);
+                break;
+            case R.id.rbJoy3:
+                myRef.child(userID).child("color").child("joy").setValue(pick[0]);
+                myRef.child(userID).child("button").child("joy").setValue(R.id.rbJoy3);
+                break;
+
+        }
+
+        btnId=rg[1].getCheckedRadioButtonId();
+        switch(btnId){
+
+            case R.id.rbSad1://분홍
+                myRef.child(userID).child("color").child("sad").setValue("-65324");
+                myRef.child(userID).child("button").child("sad").setValue(R.id.rbSad1);
+                break;
+            case R.id.rbSad2://주황
+                myRef.child(userID).child("color").child("sad").setValue("-1245434");
+                myRef.child(userID).child("button").child("sad").setValue(R.id.rbSad2);
+                break;
+            case R.id.rbSad3:
+                myRef.child(userID).child("color").child("sad").setValue(pick[1]);
+                myRef.child(userID).child("button").child("sad").setValue(R.id.rbSad3);
+                break;
+
+        }
+
+        btnId=rg[2].getCheckedRadioButtonId();
+        switch(btnId){
+
+            case R.id.rbAnger1://초록
+                myRef.child(userID).child("color").child("anger").setValue("-11927752");
+                myRef.child(userID).child("button").child("anger").setValue(R.id.rbAnger1);
+                break;
+            case R.id.rbAnger2://파랑
+                myRef.child(userID).child("color").child("anger").setValue("-14451969");
+                myRef.child(userID).child("button").child("anger").setValue(R.id.rbAnger2);
+                break;
+            case R.id.rbAnger3:
+                myRef.child(userID).child("color").child("anger").setValue(pick[2]);
+                myRef.child(userID).child("button").child("anger").setValue(R.id.rbAnger3);
+                break;
+
+        }
+        btnId=rg[3].getCheckedRadioButtonId();
+        switch(btnId){
+
+            case R.id.rbFear1://주황
+                myRef.child(userID).child("color").child("fear").setValue("-1245434");
+                myRef.child(userID).child("button").child("fear").setValue(R.id.rbFear1);
+                break;
+            case R.id.rbFear2://초록
+                myRef.child(userID).child("color").child("fear").setValue("-11927752");
+                myRef.child(userID).child("button").child("fear").setValue(R.id.rbFear2);
+                break;
+            case R.id.rbFear3:
+                myRef.child(userID).child("color").child("fear").setValue(pick[3]);
+                myRef.child(userID).child("button").child("fear").setValue(R.id.rbFear3);
+                break;
+
+        }
+        btnId=rg[4].getCheckedRadioButtonId();
+        switch(btnId){
+
+            case R.id.rbDisgust1://파랑
+                myRef.child(userID).child("color").child("disgust").setValue("-14451969");
+                myRef.child(userID).child("button").child("disgust").setValue(R.id.rbDisgust1);
+                break;
+            case R.id.rbDisgust2://보라
+                myRef.child(userID).child("color").child("disgust").setValue("-5635864");
+                myRef.child(userID).child("button").child("disgust").setValue(R.id.rbDisgust2);
+                break;
+            case R.id.rbDisgust3:
+                myRef.child(userID).child("color").child("disgust").setValue(pick[4]);
+                myRef.child(userID).child("button").child("disgust").setValue(R.id.rbDisgust3);
+                break;
+
+        }
+        btnId=rg[5].getCheckedRadioButtonId();
+        switch(btnId){
+
+            case R.id.rbRestless1://노랑
+                myRef.child(userID).child("color").child("restless").setValue("-1245434");
+                myRef.child(userID).child("button").child("restless").setValue(R.id.rbRestless1);
+                break;
+            case R.id.rbRestless2://주황
+                myRef.child(userID).child("color").child("restless").setValue("-1245434");
+                myRef.child(userID).child("button").child("restless").setValue(R.id.rbRestless2);
+                break;
+            case R.id.rbRestless3:
+                myRef.child(userID).child("color").child("restless").setValue(pick[5]);
+                myRef.child(userID).child("button").child("restless").setValue(R.id.rbRestless3);
+                break;
+
+        }
+
+        Intent intent=new Intent(Setting.this,MainActivity.class);
+        startActivity(intent);
+        finish();
+
+    }
 
 
-    @Override
-    public void onClick(View v) {
+    public void setBtnChange(View v){
+
         ID=v.getId();
         color = PreferenceManager.getDefaultSharedPreferences(this).getInt("color", Color.WHITE);
         new ColorPickerDialog(this, this, color).show();

@@ -21,6 +21,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,11 +37,10 @@ import com.kakao.usermgmt.response.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MemoList extends AppCompatActivity {
+public class MemoList extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private DatabaseReference mDatabase;
     String tokenID = FirebaseInstanceId.getInstance().getToken();
-    static final String[] LIST_MENU = {"LIST1", "LIST2", "LIST3"};
     public static final String ANONYMOUS = "anonymous";
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
     private FirebaseDatabase mFirebaseDatabase; // 데이터베이스에 접근할 수 있는 진입점 클래스입니다.
@@ -62,9 +62,6 @@ public class MemoList extends AppCompatActivity {
         mUsername = ANONYMOUS;
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mMessageListView = (ListView) findViewById(R.id.messageListView);
-//        mPhotoPickerButton = (ImageButton) findViewById(R.id.photoPickerButton);
-//        mMessageEditText = (EditText) findViewById(R.id.messageEditText);
-//        mSendButton = (Button) findViewById(R.id.sendButton);
 
         FloatingActionButton btnWrite = findViewById(R.id.btnWrite);
         btnWrite.setOnClickListener(new View.OnClickListener(){
@@ -78,55 +75,16 @@ public class MemoList extends AppCompatActivity {
         });
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabase = mFirebaseDatabase.getReference().child("userInfo").child(mAuth.getUid()).child("memo_list"); // jj
+        mDatabase = mFirebaseDatabase.getReference().child("userInfo").child(mAuth.getUid()).child("memo_list");
 
 
         List<TextItem> friendlyMessages = new ArrayList<>();
         mMessageAdapter = new MessageAdapter(this, R.layout.activity_text_item, friendlyMessages);
         mMessageListView.setAdapter(mMessageAdapter);
+        mMessageListView.setOnItemClickListener(this);
 
         // Initialize progress bar
         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-
-        // ImagePickerButton shows an image picker to upload a image for a message
-//        mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // TODO: Fire an intent to show an image picker
-//            }
-//        });
-
-//        mMessageEditText.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                if (charSequence.toString().trim().length() > 0) {
-//                    mSendButton.setEnabled(true);
-//                } else {
-//                    mSendButton.setEnabled(false);
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//            }
-//        });
-//        mMessageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(DEFAULT_MSG_LENGTH_LIMIT)});
-
-        // Send button sends a message and clears the EditText
-//        mSendButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // TODO: Send messages on click
-//                TextItem mFriendlyMessage = new TextItem(mMessageEditText.getText().toString(), mUsername, null); //jj
-//                mDatabase.push().setValue(mFriendlyMessage); // 등록
-//                // Clear input box
-//                mMessageEditText.setText("");
-//            }
-//        });
 
         mChildEventListener = new ChildEventListener() {
             // 데이터가 추가 되었을 때.
@@ -172,25 +130,15 @@ public class MemoList extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
-} // end onCreate
 
-  //      ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, LIST_MENU) ;
+    public void onItemClick(AdapterView<?> parent, View v, int position, long id)
+    {
+        TextItem item=(TextItem)parent.getItemAtPosition(position);
+        Pop pop=new Pop(this,item);
+        pop.show();
 
-        //ListView listview = (ListView) findViewById(R.id.listview) ;
-//        //listview.setAdapter(adapter) ;
-//
-//        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            // 코드 계속 ...
-//
-//            @Override
-//            public void onItemClick(AdapterView parent, View v, int position, long id) {
-//
-//                // get TextView's Text.
-//                String strText = (String) parent.getItemAtPosition(position) ;
-//
-//                // TODO : use strText
-//            }
-//        }) ;
+    }
 
 
-//    }
+
+}

@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="21.6"
+    android:viewportHeight="21.6">
+  <group android:translateX="-1.2"
+      android:translateY="-1.2">
+      <path
+          android:fillColor="#FFFFFF"
+          android:pathData="M3,18h18v-2L3,16v2zM3,13h18v-2L3,11v2zM3,6v2h18L21,6L3,6z"/>
+
+<!--      <item android:state_pressed="true" android:fillColor="#808080"/>-->
+<!--      <item android:state_focused="true" android:fillColor="#808080"/>-->
+<!--      <item android:state_pressed="true" android:fillColor="#808080"/>-->
+
+
+  </group>
+</vector>
+<!--<selector xmlns:android="http://schemas.android.com/apk/res/android">-->
+<!--<item android:state_pressed="true" android:drawable="@drawable/bg_select"/>-->
+<!--<item android:state_focused="true" android:drawable="@drawable/bg_select"/>-->
+<!--<item android:state_pressed="true" android:drawable="@drawable/bg_select"/>-->
+<!--<item android:drawable="@drawable/bg"/>-->
+<!--</selector>-->
+

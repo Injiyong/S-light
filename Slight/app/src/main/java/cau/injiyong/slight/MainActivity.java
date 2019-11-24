@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Python py = Python.getInstance();
         PyObject pyf = py.getModule("myscript"); // py file name
-        PyObject obj = pyf.callAttr("test", "하이하이"); // def name in py file
+        PyObject obj = pyf.callAttr("test", ""); // def name in py file
         textview = findViewById(R.id.pytext);
         textview.setText(obj.toString());
 
@@ -259,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onClick(View v ){
+
                 Intent intent=new Intent(getApplicationContext(),
                         Setting.class); //넘어갈 클래스
                 startActivity(intent);
@@ -270,12 +271,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(mBluetoothAdapter == null) { // 블루투스 지원함?
             Toast.makeText(getApplicationContext(), "블루투스를 지원하지 않는 기기입니다.", Toast.LENGTH_LONG).show();
+
         }
         else {
+
             if (mBluetoothAdapter.isEnabled()) { //블루투스 활성화됨?
+                if(mBluetoothSocket.isConnected()&&mPairedDevices.size() > 0){
+                    connectSelectedDevice("HC-06");
+                }
                 Toast.makeText(getApplicationContext(), "블루투스가 이미 활성화 되어 있습니다.", Toast.LENGTH_LONG).show();
                 mTvBluetoothStatus.setText("활성화");
             }
+
             else {
                 Toast.makeText(getApplicationContext(), "블루투스가 활성화 되어 있지 않습니다.", Toast.LENGTH_LONG).show();
                 Intent intentBluetoothEnable = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -308,26 +315,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-    void listPairedDevices() {
+    public void listPairedDevices() {
         if (mBluetoothAdapter.isEnabled()) {
             mPairedDevices = mBluetoothAdapter.getBondedDevices();
 
+
             if (mPairedDevices.size() > 0) {
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("장치 선택");
 
                 mListPairedDevices = new ArrayList<String>();
+
                 for (BluetoothDevice device : mPairedDevices) {
                     mListPairedDevices.add(device.getName());
                     //mListPairedDevices.add(device.getName() + "\n" + device.getAddress());
                 }
+
                 final CharSequence[] items = mListPairedDevices.toArray(new CharSequence[mListPairedDevices.size()]);
                 mListPairedDevices.toArray(new CharSequence[mListPairedDevices.size()]);
+
+
+//                if(items.length >= 1){
+//                    connectSelectedDevice(items[0].toString());
+//                }
+
+
 
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
-                        connectSelectedDevice(items[item].toString());
+
+//                       txt.setText(Integer.toString(item));
+                       connectSelectedDevice(items[item].toString());
+
+//                        txt.setText(items[item].toString() + items[item].toString());
                     }
                 });
                 AlertDialog alert = builder.create();
@@ -363,10 +385,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
 
+
         public ConnectedBluetoothThread(BluetoothSocket socket) {
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
+
 
             try {
                 tmpIn = socket.getInputStream();
@@ -377,7 +401,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
+
         }
+
+
         public void run() {
             byte[] buffer = new byte[1024];
             int bytes;

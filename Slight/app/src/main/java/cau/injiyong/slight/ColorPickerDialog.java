@@ -57,7 +57,7 @@ public class ColorPickerDialog extends Dialog {
             float r = CENTER_X - mPaint.getStrokeWidth() * 0.5f;
 
             canvas.drawColor(0xcc000000);
-          //  canvas.drawColor(Color.rgb(64,64,64));
+            canvas.drawColor(Color.rgb(64,64,64));
             canvas.translate(CENTER_X, CENTER_X);
             canvas.drawOval(new RectF(-r, -r, r, r), mPaint);
             canvas.drawCircle(0, 0, CENTER_RADIUS, mCenterPaint);

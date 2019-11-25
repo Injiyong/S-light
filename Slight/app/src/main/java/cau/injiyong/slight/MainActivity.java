@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Message;
@@ -90,7 +91,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ConnectedBluetoothThread mThreadConnectedBluetooth;
     BluetoothDevice mBluetoothDevice; //기기의 장치정보, 다른 기기랑 연결
     BluetoothSocket mBluetoothSocket; //폰과 디바이스간 통신 채널에 대응
-
+    SharedPreferences kbk;
+    SharedPreferences.Editor editor;
     final static int BT_REQUEST_ENABLE = 1;
     final static int BT_MESSAGE_READ = 2;
     final static int BT_CONNECTING_STATUS = 3;
@@ -116,7 +118,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        kbk = getSharedPreferences("color",MODE_PRIVATE);
+        editor = kbk.edit();
 
+        int x = kbk.getInt("myColor", 0);
+
+        mBluetoothHandler = new Handler(){
+            public void handleMessage(android.os.Message msg){
+                if(msg.what == BT_MESSAGE_READ){
+                    String readMessage = null;
+                    try {
+                        readMessage = new String((byte[]) msg.obj, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    mTvReceiveData.setText(readMessage);
+                }
+            }
+        };
         lightSwitch=(Switch)findViewById(R.id.lightSwitch);
 
         btnbright=(Button)findViewById(R.id.btnbright);
@@ -126,15 +145,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnBluetoothOff = (Button)findViewById(R.id.btnBluetoothOff);
         mBtnConnect = (Button)findViewById(R.id.btnConnect);
 
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); //해당 장치가 블루투스 기능을 지원하는지 알아오는 메소그
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); //해당 장치가 블루투스 기능을 지원하는지 알아오는 메소드
 
+        if(mBluetoothAdapter != null && mBluetoothAdapter.isEnabled()){
+            mTvBluetoothStatus.setText("활성화");
+            bk("HC-06");
+        }
+        else{
+            mTvBluetoothStatus.setText("비활성화");
+        }
 
         btnbright.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mThreadConnectedBluetooth!=null){
-                    mThreadConnectedBluetooth.write("1");
-                }
             }
         });
 
@@ -142,11 +165,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(lightSwitch.isChecked()==true){
+                    Log.d("하....", "노답...");
                     if(mThreadConnectedBluetooth!=null){
                         mThreadConnectedBluetooth.write("1");
                     }
                 }
                 else{
+                    Log.d("하......", "유답...");
                     if(mThreadConnectedBluetooth!=null){
                         mThreadConnectedBluetooth.write("2");
                     }
@@ -174,19 +199,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 listPairedDevices();
             }
         });
-        mBluetoothHandler = new Handler(){
-            public void handleMessage(android.os.Message msg){
-                if(msg.what == BT_MESSAGE_READ){
-                    String readMessage = null;
-                    try {
-                        readMessage = new String((byte[]) msg.obj, "UTF-8");
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    mTvReceiveData.setText(readMessage);
-                }
-            }
-        };
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -194,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         relative_color = (androidx.constraintlayout.widget.ConstraintLayout)findViewById(R.id.relative_color);
-
+        relative_color.setBackgroundColor(x);
         if (! Python.isStarted())
             Python.start(new AndroidPlatform(this));
 
@@ -220,7 +232,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 );
             }
         }
-
 
         intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
@@ -271,26 +282,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(mBluetoothAdapter == null) { // 블루투스 지원함?
             Toast.makeText(getApplicationContext(), "블루투스를 지원하지 않는 기기입니다.", Toast.LENGTH_LONG).show();
-
         }
         else {
-
             if (mBluetoothAdapter.isEnabled()) { //블루투스 활성화됨?
-                if(mBluetoothSocket.isConnected()&&mPairedDevices.size() > 0){
+                if(mPairedDevices != null && mPairedDevices.size() > 0){
                     connectSelectedDevice("HC-06");
                 }
                 Toast.makeText(getApplicationContext(), "블루투스가 이미 활성화 되어 있습니다.", Toast.LENGTH_LONG).show();
                 mTvBluetoothStatus.setText("활성화");
             }
-
             else {
                 Toast.makeText(getApplicationContext(), "블루투스가 활성화 되어 있지 않습니다.", Toast.LENGTH_LONG).show();
                 Intent intentBluetoothEnable = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(intentBluetoothEnable, BT_REQUEST_ENABLE);
+
             }
         }
     }
     void bluetoothOff() {
+        if(mThreadConnectedBluetooth != null){
+            mThreadConnectedBluetooth.write("2");
+        }
+        lightSwitch.setChecked(false);
         if (mBluetoothAdapter.isEnabled()) {
             mBluetoothAdapter.disable();
             Toast.makeText(getApplicationContext(), "블루투스가 비활성화 되었습니다.", Toast.LENGTH_SHORT).show();
@@ -307,6 +320,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (resultCode == RESULT_OK) { // 블루투스 활성화를 확인을 클릭하였다면
                     Toast.makeText(getApplicationContext(), "블루투스 활성화", Toast.LENGTH_LONG).show();
                     mTvBluetoothStatus.setText("활성화");
+                    if(mPairedDevices != null && mPairedDevices.size() > 0){
+                        connectSelectedDevice("HC-06");
+                    }
                 } else if (resultCode == RESULT_CANCELED) { // 블루투스 활성화를 취소를 클릭하였다면
                     Toast.makeText(getApplicationContext(), "취소", Toast.LENGTH_LONG).show();
                     mTvBluetoothStatus.setText("비활성화");
@@ -315,6 +331,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
+    public void bk(String s){
+        mPairedDevices = mBluetoothAdapter.getBondedDevices();
+        if(mPairedDevices.size() > 0){
+            connectSelectedDevice("HC-06");
+        }
+    }
+
     public void listPairedDevices() {
         if (mBluetoothAdapter.isEnabled()) {
             mPairedDevices = mBluetoothAdapter.getBondedDevices();
@@ -347,6 +372,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onClick(DialogInterface dialog, int item) {
 
 //                       txt.setText(Integer.toString(item));
+                        Log.d("ㅇㅂㅇ", items[item].toString());
                        connectSelectedDevice(items[item].toString());
 
 //                        txt.setText(items[item].toString() + items[item].toString());
@@ -375,6 +401,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mThreadConnectedBluetooth = new ConnectedBluetoothThread(mBluetoothSocket);
             mThreadConnectedBluetooth.start();
             mBluetoothHandler.obtainMessage(BT_CONNECTING_STATUS, 1, -1).sendToTarget();
+            Toast.makeText(getApplicationContext(), "블루투스 연결 성공!!! ㅊㅊㅊ", Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             Toast.makeText(getApplicationContext(), "블루투스 연결 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
         }
@@ -447,9 +474,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // byte[] 안에 있는 데이터를 한번에 기록해 준다.
                 mmOutStream.write(msg.getBytes());  // 문자열 전송.
             }catch(Exception e) {  // 문자열 전송 도중 오류가 발생한 경우
-                Toast.makeText(getApplicationContext(), "데이터 전송중 오류가 발생",
+                Toast.makeText(getApplicationContext(), "기기가 연결되어 있지 않습니다.",
                         Toast.LENGTH_LONG).show();
-                finish();  // App 종료
             }
         }
 
@@ -466,6 +492,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        if(mBluetoothAdapter.isEnabled() && !lightSwitch.isChecked())
+            lightSwitch.setChecked(true);
         color = PreferenceManager.getDefaultSharedPreferences(this).getInt("color", Color.WHITE);
         new ColorPickerDialog(this, this, color).show();
     }
@@ -473,18 +501,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void colorChanged(int color) {
 
+        editor.putInt("myColor", color);
+        editor.commit();
+        int x = kbk.getInt("myColor", 0);
+        Log.d("여기는?",x + "");
+
         PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("color", color).commit();
         relative_color.setBackgroundColor(color);
 
-        mThreadConnectedBluetooth.sendData("3");
+        if(mThreadConnectedBluetooth != null) {
+            mThreadConnectedBluetooth.sendData("3");
 
-        String r=String.format("%s",Color.red(color));
-        mThreadConnectedBluetooth.sendData(r);
-        String g=String.format("%s",Color.green(color));
-        mThreadConnectedBluetooth.sendData(g);
-        String b=String.format("%s",Color.blue(color));
-        mThreadConnectedBluetooth.sendData(b);
-
+            String r = String.format("%s", Color.red(color));
+            mThreadConnectedBluetooth.sendData(r);
+            String g = String.format("%s", Color.green(color));
+            mThreadConnectedBluetooth.sendData(g);
+            String b = String.format("%s", Color.blue(color));
+            mThreadConnectedBluetooth.sendData(b);
+        }
         //txt.setText("r =" + r + " g =" + g + " b=" + b);
         String hexColor = String.format("#%06X", (0xFFFFFF & color));
         String userID = mAuth.getUid();
@@ -543,6 +577,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onBackPressed(){            //BACK키가 눌렸을 때의 함수로 Override하여 사용합니다.
 
+        if(mThreadConnectedBluetooth!=null){
+            mThreadConnectedBluetooth.write("1");
+        }
         if ( flag_BackKey == false ){
 
             // 첫 번째로 클릭했을 경우로, false에서 true로 바꿔줍니다.

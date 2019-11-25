@@ -121,12 +121,13 @@
         android:layout_width="200dp"
         android:layout_height="30dp"
         android:id="@+id/relative_color"
+        android:background="@drawable/btncolor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.76"
+        app:layout_constraintVertical_bias="0.765"
         >
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -216,7 +217,7 @@
         android:layout_width="247dp"
         android:layout_height="10dp"
         android:max="200"
-        android:progress="50"
+        android:progress="100"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.75"
@@ -275,6 +276,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.43"/>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="S-light"
+        android:background="@drawable/btncolor"
+        android:textSize="40sp"
+        android:textColor="#f2c50a"
+        android:layout_margin="10dp"
+        android:gravity="center"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1" />
 
     <!--    <SeekBar-->
     <!--        android:id="@+id/brightnessBar"-->

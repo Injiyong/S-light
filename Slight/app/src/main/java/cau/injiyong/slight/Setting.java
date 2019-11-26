@@ -58,30 +58,30 @@ public class Setting extends AppCompatActivity implements ColorPickerDialog.OnCo
     int ID;
     ImageView iv;
     Button btnChange[]=new Button[6];
-
-    TextView mTvBluetoothStatus;
-    TextView mTvReceiveData;
-    TextView mTvSendData;
-    Button mBtnBluetoothOn;
-    Button mBtnBluetoothOff;
-    Button mBtnConnect;
-    Button mBtnSendData;
-
-    BluetoothAdapter mBluetoothAdapter;
-    Set<BluetoothDevice> mPairedDevices;
-    List<String> mListPairedDevices;
-
-    Handler mBluetoothHandler;
-    ConnectedBluetoothThread mThreadConnectedBluetooth;
-    BluetoothDevice mBluetoothDevice;
-    BluetoothSocket mBluetoothSocket;
-
-    final static int BT_REQUEST_ENABLE = 1;
-    final static int BT_MESSAGE_READ = 2;
-    final static int BT_CONNECTING_STATUS = 3;
-    final static UUID BT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-
-
+//
+//    TextView mTvBluetoothStatus;
+//    TextView mTvReceiveData;
+//    TextView mTvSendData;
+//    Button mBtnBluetoothOn;
+//    Button mBtnBluetoothOff;
+//    Button mBtnConnect;
+//    Button mBtnSendData;
+//
+//    BluetoothAdapter mBluetoothAdapter;
+//    Set<BluetoothDevice> mPairedDevices;
+//    List<String> mListPairedDevices;
+//
+//    Handler mBluetoothHandler;
+//    ConnectedBluetoothThread mThreadConnectedBluetooth;
+//    BluetoothDevice mBluetoothDevice;
+//    BluetoothSocket mBluetoothSocket;
+//
+//    final static int BT_REQUEST_ENABLE = 1;
+//    final static int BT_MESSAGE_READ = 2;
+//    final static int BT_CONNECTING_STATUS = 3;
+//    final static UUID BT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+//
+//
 
     RadioGroup[] rg=new RadioGroup[6];
     Integer[] rb1=new Integer[6];
@@ -110,29 +110,29 @@ public class Setting extends AppCompatActivity implements ColorPickerDialog.OnCo
         myRef = database.getReference("userInfo");
 
 
-        mTvBluetoothStatus = (TextView)findViewById(R.id.tvBluetoothStatus);
-        mTvReceiveData = (TextView)findViewById(R.id.tvReceiveData);
-        //mTvSendData =  (EditText) findViewById(R.id.tvSendData);
-        mBtnBluetoothOn = (Button)findViewById(R.id.btnBluetoothOn);
-        mBtnBluetoothOff = (Button)findViewById(R.id.btnBluetoothOff);
-        // mBtnConnect = (Button)findViewById(R.id.btnConnect);
-        // mBtnSendData = (Button)findViewById(R.id.btnSendData);
-
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        mBluetoothHandler = new Handler(){
-            public void handleMessage(android.os.Message msg){
-                if(msg.what == BT_MESSAGE_READ){
-                    String readMessage = null;
-                    try {
-                        readMessage = new String((byte[]) msg.obj, "UTF-8");
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    mTvReceiveData.setText(readMessage);
-                }
-            }
-        };
+//       // mTvBluetoothStatus = (TextView)findViewById(R.id.tvBluetoothStatus);
+//      //  mTvReceiveData = (TextView)findViewById(R.id.tvReceiveData);
+//        //mTvSendData =  (EditText) findViewById(R.id.tvSendData);
+//        mBtnBluetoothOn = (Button)findViewById(R.id.btnBluetoothOn);
+//        mBtnBluetoothOff = (Button)findViewById(R.id.btnBluetoothOff);
+//        // mBtnConnect = (Button)findViewById(R.id.btnConnect);
+//        // mBtnSendData = (Button)findViewById(R.id.btnSendData);
+//
+//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//
+//        mBluetoothHandler = new Handler(){
+//            public void handleMessage(android.os.Message msg){
+//                if(msg.what == BT_MESSAGE_READ){
+//                    String readMessage = null;
+//                    try {
+//                        readMessage = new String((byte[]) msg.obj, "UTF-8");
+//                    } catch (UnsupportedEncodingException e) {
+//                        e.printStackTrace();
+//                    }
+//                    mTvReceiveData.setText(readMessage);
+//                }
+//            }
+//        };
 
         tempiv[0] = (ImageView) findViewById(R.id.imageView);
         tempiv[1] = (ImageView) findViewById(R.id.imageView2);
@@ -247,9 +247,9 @@ public class Setting extends AppCompatActivity implements ColorPickerDialog.OnCo
         builder1.setTitle("보라").setMessage("신중함을 요하는 상황이나 창의적인 아이디어가 필요할때, 혹은 터닝포인트가 필요할때 도움을 줍니다.");
         AlertDialog alertDialog = builder1.create();
         alertDialog.show();
-        if(mThreadConnectedBluetooth!=null){
-            mThreadConnectedBluetooth.write("1");
-        }
+//        if(mThreadConnectedBluetooth!=null){
+//            mThreadConnectedBluetooth.write("1");
+//        }
     }
 
     public void OnClickHandlerPink(View view) {
@@ -395,8 +395,8 @@ public class Setting extends AppCompatActivity implements ColorPickerDialog.OnCo
 
         }
 
-        Intent intent=new Intent(Setting.this,MainActivity.class);
-        startActivity(intent);
+        //Intent intent=new Intent(Setting.this,MainActivity.class);
+        //startActivity(intent);
         finish();
 
     }
@@ -464,63 +464,63 @@ public class Setting extends AppCompatActivity implements ColorPickerDialog.OnCo
 
 
 
-
-    private class ConnectedBluetoothThread extends Thread {
-        private final BluetoothSocket mmSocket;
-        private final InputStream mmInStream;
-        private final OutputStream mmOutStream;
-
-        public ConnectedBluetoothThread(BluetoothSocket socket) {
-            mmSocket = socket;
-            InputStream tmpIn = null;
-            OutputStream tmpOut = null;
-
-            try {
-                tmpIn = socket.getInputStream();
-                tmpOut = socket.getOutputStream();
-            } catch (IOException e) {
-                Toast.makeText(getApplicationContext(), "소켓 연결 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
-            }
-
-            mmInStream = tmpIn;
-            mmOutStream = tmpOut;
-        }
-        public void run() {
-            byte[] buffer = new byte[1024];
-            int bytes;
-
-            while (true) {
-                try {
-                    bytes = mmInStream.available();
-                    if (bytes != 0) {
-                        SystemClock.sleep(100);
-                        bytes = mmInStream.available();
-                        bytes = mmInStream.read(buffer, 0, bytes);
-                        mBluetoothHandler.obtainMessage(BT_MESSAGE_READ, bytes, -1, buffer).sendToTarget();
-                    }
-                } catch (IOException e) {
-                    break;
-                }
-            }
-        }
-        public void write(String str) {
-            byte[] bytes = str.getBytes();
-            try {
-                mmOutStream.write(bytes);
-            } catch (IOException e) {
-                Toast.makeText(getApplicationContext(), "데이터 전송 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
-            }
-        }
-        public void cancel() {
-            try {
-                mmSocket.close();
-            } catch (IOException e) {
-                Toast.makeText(getApplicationContext(), "소켓 해제 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-
+//
+//    private class ConnectedBluetoothThread extends Thread {
+//        private final BluetoothSocket mmSocket;
+//        private final InputStream mmInStream;
+//        private final OutputStream mmOutStream;
+//
+//        public ConnectedBluetoothThread(BluetoothSocket socket) {
+//            mmSocket = socket;
+//            InputStream tmpIn = null;
+//            OutputStream tmpOut = null;
+//
+//            try {
+//                tmpIn = socket.getInputStream();
+//                tmpOut = socket.getOutputStream();
+//            } catch (IOException e) {
+//                Toast.makeText(getApplicationContext(), "소켓 연결 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+//            }
+//
+//            mmInStream = tmpIn;
+//            mmOutStream = tmpOut;
+//        }
+//        public void run() {
+//            byte[] buffer = new byte[1024];
+//            int bytes;
+//
+//            while (true) {
+//                try {
+//                    bytes = mmInStream.available();
+//                    if (bytes != 0) {
+//                        SystemClock.sleep(100);
+//                        bytes = mmInStream.available();
+//                        bytes = mmInStream.read(buffer, 0, bytes);
+//                        mBluetoothHandler.obtainMessage(BT_MESSAGE_READ, bytes, -1, buffer).sendToTarget();
+//                    }
+//                } catch (IOException e) {
+//                    break;
+//                }
+//            }
+//        }
+//        public void write(String str) {
+//            byte[] bytes = str.getBytes();
+//            try {
+//                mmOutStream.write(bytes);
+//            } catch (IOException e) {
+//                Toast.makeText(getApplicationContext(), "데이터 전송 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+//            }
+//        }
+//        public void cancel() {
+//            try {
+//                mmSocket.close();
+//            } catch (IOException e) {
+//                Toast.makeText(getApplicationContext(), "소켓 해제 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+//            }
+//        }
+//    }
+//
+//
 
 
 

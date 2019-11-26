@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -28,6 +29,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,8 +39,11 @@ import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.kakao.network.ApiErrorCode;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
@@ -74,13 +79,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     androidx.constraintlayout.widget.ConstraintLayout relative_color;
     Switch lightSwitch;
+    SeekBar seekbar;
     Button btncolor;
     Button btnbright;
     int color;
-    TextView textview;
-    TextView mTvBluetoothStatus;
-    TextView mTvReceiveData;
-    TextView mTvSendData;
+ //   TextView textview;
+//    TextView mTvBluetoothStatus;
+//    TextView mTvReceiveData;
+ //   TextView mTvSendData;
     Button mBtnBluetoothOn;
     Button mBtnBluetoothOff;
     Button mBtnConnect;
@@ -98,6 +104,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     final static int BT_CONNECTING_STATUS = 3;
     final static UUID BT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
+    String voiceResult;
+    String sentimentResult;
+
+    String joyColor;
+    String sadnessColor;
+    String angerColor;
+    String fearColor;
+    String disgustColor;
+    String restlessColor;
 
     FirebaseDatabase database;
     DatabaseReference myRef;
@@ -106,6 +121,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Intent intent;
     SpeechRecognizer mRecognizer;
     TextView txt;
+    //Voice 버튼
+    Button btnVoice;
+
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
 
     private boolean flag_BackKey = false;                //BACK KEY가 눌려졌는지에 대한 FLAG 로 사용됩니다.
@@ -113,7 +131,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int MSG_TIMER = 1;              // Switch문에서 사용하게 되는 Key값입니다.
     private static final int BACKKEY_TIMEOUT = 2;    // Interval을 정의합니다.
     private static final int IN_MILLISEC = 1000;        // Millis를 정의합니다.
-
+    int max = 255;
+    int bk_1 = 125;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,15 +151,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    mTvReceiveData.setText(readMessage);
+                //      mTvReceiveData.setText(readMessage);
                 }
             }
         };
         lightSwitch=(Switch)findViewById(R.id.lightSwitch);
-
+        seekbar=(SeekBar)findViewById(R.id.seekBar1);
         btnbright=(Button)findViewById(R.id.btnbright);
-        mTvBluetoothStatus = (TextView)findViewById(R.id.tvBluetoothStatus);
-        mTvReceiveData = (TextView)findViewById(R.id.tvReceiveData);
+       // mTvBluetoothStatus = (TextView)findViewById(R.id.tvBluetoothStatus);
+      //  mTvReceiveData = (TextView)findViewById(R.id.tvReceiveData);
         mBtnBluetoothOn = (Button)findViewById(R.id.btnBluetoothOn);
         mBtnBluetoothOff = (Button)findViewById(R.id.btnBluetoothOff);
         mBtnConnect = (Button)findViewById(R.id.btnConnect);
@@ -148,18 +167,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); //해당 장치가 블루투스 기능을 지원하는지 알아오는 메소드
 
         if(mBluetoothAdapter != null && mBluetoothAdapter.isEnabled()){
-            mTvBluetoothStatus.setText("활성화");
+         //   mTvBluetoothStatus.setText("활성화");
             bk("HC-06");
         }
         else{
-            mTvBluetoothStatus.setText("비활성화");
+//            mTvBluetoothStatus.setText("비활성화");
         }
 
-        btnbright.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
 
         lightSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -167,7 +181,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(lightSwitch.isChecked()==true){
                     Log.d("하....", "노답...");
                     if(mThreadConnectedBluetooth!=null){
-                        mThreadConnectedBluetooth.write("1");
+                        int x = kbk.getInt("myColor", 0);
+                        mThreadConnectedBluetooth.sendData("1");
+                        String r = String.format("%s", Color.red(x));
+                        mThreadConnectedBluetooth.sendData(r);
+                        String g = String.format("%s", Color.green(x));
+                        mThreadConnectedBluetooth.sendData(g);
+                        String t = String.format("%s", Color.blue(x));
+                        mThreadConnectedBluetooth.sendData(t);
                     }
                 }
                 else{
@@ -179,6 +200,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                bk_1 = seekbar.getProgress();
+                /*
+                if(mThreadConnectedBluetooth!=null){
+                    mThreadConnectedBluetooth.sendData("4");
+                    Log.d("병국", bk_1 + "");
+                    mThreadConnectedBluetooth.sendData(Integer.toString(bk_1));
+                }
+
+                 */
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                bk_1 = seekbar.getProgress();
+                if(mThreadConnectedBluetooth!=null){
+                    mThreadConnectedBluetooth.sendData("4");
+                    Log.d("병국", bk_1 + "");
+                    mThreadConnectedBluetooth.sendData(Integer.toString(bk_1));
+                }
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                bk_1 = seekbar.getProgress();
+                /*
+                if(mThreadConnectedBluetooth!=null){
+                    mThreadConnectedBluetooth.sendData("4");
+                    Log.d("병국", bk_1 + "");
+                    mThreadConnectedBluetooth.sendData(Integer.toString(bk_1));
+                }
+
+                 */
+            }
+        });
 
 
         mBtnBluetoothOn.setOnClickListener(new Button.OnClickListener() {
@@ -204,17 +262,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("userInfo");
 
-
+        btnVoice= findViewById(R.id.btnVoice);
         relative_color = (androidx.constraintlayout.widget.ConstraintLayout)findViewById(R.id.relative_color);
         relative_color.setBackgroundColor(x);
-        if (! Python.isStarted())
-            Python.start(new AndroidPlatform(this));
 
-        Python py = Python.getInstance();
-        PyObject pyf = py.getModule("myscript"); // py file name
-        PyObject obj = pyf.callAttr("test", ""); // def name in py file
-        textview = findViewById(R.id.pytext);
-        textview.setText(obj.toString());
+//        if (! Python.isStarted())
+//            Python.start(new AndroidPlatform(this));
+
+        String userID=mAuth.getUid();
+
+        myRef.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                joyColor = String.valueOf(dataSnapshot.child("color").child("joy"));
+                sadnessColor = String.valueOf(dataSnapshot.child("color").child("sadness"));
+                angerColor = String.valueOf(dataSnapshot.child("color").child("anger"));
+                fearColor = String.valueOf(dataSnapshot.child("color").child("fear"));
+                disgustColor = String.valueOf(dataSnapshot.child("color").child("disgust"));
+                restlessColor = String.valueOf(dataSnapshot.child("color").child("restless"));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+//
+//        Python py = Python.getInstance();
+//        PyObject pyf = py.getModule("myscript"); // py file name
+//        PyObject obj = pyf.callAttr("test", ""); // def name in py file
+//        textview = findViewById(R.id.pytext);
+//        textview.setText(obj.toString());
 
         btncolor = (Button)findViewById(R.id.btncolor);
         btncolor.setOnClickListener(this);
@@ -243,12 +321,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         txt = (TextView) findViewById(R.id.txt);
 
-        //Voice 버튼
-        Button btnVoice= findViewById(R.id.btnVoice);
+
         btnVoice.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v ){
+                btnVoice.setBackgroundResource(R.drawable.vs_micbtn_pressed);
                 mRecognizer.startListening(intent);
+                btnVoice.setBackgroundResource(R.drawable.vs_micbtn_off);
             }
         });
 
@@ -289,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     connectSelectedDevice("HC-06");
                 }
                 Toast.makeText(getApplicationContext(), "블루투스가 이미 활성화 되어 있습니다.", Toast.LENGTH_LONG).show();
-                mTvBluetoothStatus.setText("활성화");
+             //   mTvBluetoothStatus.setText("활성화");
             }
             else {
                 Toast.makeText(getApplicationContext(), "블루투스가 활성화 되어 있지 않습니다.", Toast.LENGTH_LONG).show();
@@ -307,7 +386,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mBluetoothAdapter.isEnabled()) {
             mBluetoothAdapter.disable();
             Toast.makeText(getApplicationContext(), "블루투스가 비활성화 되었습니다.", Toast.LENGTH_SHORT).show();
-            mTvBluetoothStatus.setText("비활성화");
+          //  mTvBluetoothStatus.setText("비활성화");
         }
         else {
             Toast.makeText(getApplicationContext(), "블루투스가 이미 비활성화 되어 있습니다.", Toast.LENGTH_SHORT).show();
@@ -319,13 +398,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case BT_REQUEST_ENABLE:
                 if (resultCode == RESULT_OK) { // 블루투스 활성화를 확인을 클릭하였다면
                     Toast.makeText(getApplicationContext(), "블루투스 활성화", Toast.LENGTH_LONG).show();
-                    mTvBluetoothStatus.setText("활성화");
+                //    mTvBluetoothStatus.setText("활성화");
                     if(mPairedDevices != null && mPairedDevices.size() > 0){
                         connectSelectedDevice("HC-06");
                     }
                 } else if (resultCode == RESULT_CANCELED) { // 블루투스 활성화를 취소를 클릭하였다면
                     Toast.makeText(getApplicationContext(), "취소", Toast.LENGTH_LONG).show();
-                    mTvBluetoothStatus.setText("비활성화");
+                 //   mTvBluetoothStatus.setText("비활성화");
                 }
                 break;
         }
@@ -492,7 +571,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(mBluetoothAdapter.isEnabled() && !lightSwitch.isChecked())
+        if(mBluetoothAdapter != null && mBluetoothAdapter.isEnabled() && !lightSwitch.isChecked())
             lightSwitch.setChecked(true);
         color = PreferenceManager.getDefaultSharedPreferences(this).getInt("color", Color.WHITE);
         new ColorPickerDialog(this, this, color).show();
@@ -529,6 +608,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RecognitionListener recognitionListener = new RecognitionListener() {
         @Override
         public void onReadyForSpeech(Bundle bundle) {
+            btnVoice.setBackgroundResource(R.drawable.vs_micbtn_on);
         }
 
         @Override
@@ -546,11 +626,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onEndOfSpeech() {
+
         }
 
         @Override
         public void onError(int i) {
-            txt.setText("너무 늦게 말하면 오류뜹니다.");
+
+            btnVoice.setBackgroundResource(R.drawable.vs_micbtn_off);
+            Toast.makeText(getApplicationContext(), "다시시도해주세요", Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -563,6 +646,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mResult.toArray(rs);
 
             txt.setText(rs[0]);
+
+            voiceResult = rs[0];
+
+            if (! Python.isStarted())
+                Python.start(new AndroidPlatform(getApplicationContext()));
+
+            Python py = Python.getInstance();
+            PyObject pyf = py.getModule("myscript"); // py file name
+            PyObject obj = pyf.callAttr("test", voiceResult); // def name in py file
+
+            sentimentResult = obj.toString();
+            int mySentimentColor = 0;
+
+            if (sentimentResult.equals("1"))
+                mySentimentColor = Integer.parseInt(joyColor);
+
+            else if (sentimentResult.equals("2"))
+                mySentimentColor = Integer.parseInt(sadnessColor);
+
+            else if (sentimentResult.equals("3"))
+                mySentimentColor = Integer.parseInt(angerColor);
+
+            else if (sentimentResult.equals("4"))
+                mySentimentColor = Integer.parseInt(fearColor);
+
+            else if (sentimentResult.equals("5"))
+                mySentimentColor = Integer.parseInt(disgustColor);
+
+            else if (sentimentResult.equals("6"))
+                mySentimentColor = Integer.parseInt(restlessColor);
+
+            mThreadConnectedBluetooth.sendData("3");
+
+            String sr = String.format("%s",Color.red(mySentimentColor));
+            mThreadConnectedBluetooth.sendData(sr);
+            String sg = String.format("%s",Color.green(mySentimentColor));
+            mThreadConnectedBluetooth.sendData(sg);
+            String sb = String.format("%s",Color.blue(mySentimentColor));
+            mThreadConnectedBluetooth.sendData(sb);
         }
 
         @Override
@@ -577,9 +699,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onBackPressed(){            //BACK키가 눌렸을 때의 함수로 Override하여 사용합니다.
 
-        if(mThreadConnectedBluetooth!=null){
-            mThreadConnectedBluetooth.write("1");
-        }
         if ( flag_BackKey == false ){
 
             // 첫 번째로 클릭했을 경우로, false에서 true로 바꿔줍니다.
@@ -601,6 +720,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             flag_BackKey = false;
 
             if ( Calendar.getInstance().getTimeInMillis() <= (currentTime + (BACKKEY_TIMEOUT * IN_MILLISEC )) ) {
+
+
+                mThreadConnectedBluetooth.sendData("2");
+
+                try {
+                    mBluetoothSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 finish();                //currentTime + 2000 (2초) 이므로, 2초 안에 클릭 했을 때, MainActivity를 종료해주는 부분입니다.
 

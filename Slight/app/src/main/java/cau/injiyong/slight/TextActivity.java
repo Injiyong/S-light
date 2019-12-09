@@ -1,43 +1,56 @@
 package cau.injiyong.slight;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import cau.injiyong.slight.MainActivity;
 
 public class TextActivity extends AppCompatActivity {
 
     private static final String TAG = "TextActivity";
     private final int m_nMaxLengthOfDeviceName = 500;
+//    androidx.constraintlayout.widget.ConstraintLayout relative_color;
+
 
     FirebaseDatabase database;
     DatabaseReference myRef;
     FirebaseAuth mAuth;
+    String userID;
 
     EditText etNewMessage;
     Button btUpdate;
 
     String strDate;
     TextView Datepick;
+    String sentimentResult;
+
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,65 +61,94 @@ public class TextActivity extends AppCompatActivity {
 
         etNewMessage = (EditText) findViewById(R.id.et_newData);
         btUpdate = (Button) findViewById(R.id.bt_update);
+        //    relative_color = (androidx.constraintlayout.widget.ConstraintLayout)findViewById(R.id.relative_color);
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("userInfo");
+        userID=mAuth.getUid();
 
-        //List 버튼 클릭시 list 창으로 넘어감
-//        FloatingActionButton btnNext= findViewById(R.id.bt_list);
-//        btnNext.setOnClickListener(new View.OnClickListener(){
-//
-//            @Override
-//            public void onClick(View v ){
-//                Intent intent=new Intent(getApplicationContext(),MemoList.class);
-//                startActivity(intent);
-//            }
-//        });
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("분석중....");
+        progressDialog.setCancelable(true);
+        progressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Horizontal);
 
+
+        if (! Python.isStarted())
+            Python.start(new AndroidPlatform(this));
 
         //버튼 이벤트
         btUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                etNewMessage.setFilters(new InputFilter[] { new InputFilter.LengthFilter(m_nMaxLengthOfDeviceName) });
-
-                String userID = mAuth.getUid();
-                String newMessage = etNewMessage.getText().toString();
-                TextItem mMessage = new TextItem(newMessage, strDate, null);
-
-                myRef.child(userID).child("memo_list").push().setValue(mMessage); // 원래 newMessage
-                Intent intent=new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
-
-                Toast.makeText(TextActivity.this, "등록완료", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // Read from the database
-        // 그리고 데이터베이스에 변경사항이 있으면 실행된다.
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                //     String value = dataSnapshot.getValue(String.class);
-                //데이터를 화면에 출력해 준다.
-                //   tvMessage.setText(value);
-                //     Log.d(TAG, "Value is: " + value);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+                onClickUpdate();
             }
         });
 
         Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm", java.util.Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", java.util.Locale.getDefault());
         strDate = dateFormat.format(date);
         Datepick = (TextView) findViewById(R.id.date);
         Datepick.setText(strDate);
+    }
+
+    public void onClickUpdate(){
+
+        progressDialog.show();
+
+        etNewMessage.setFilters(new InputFilter[] { new InputFilter.LengthFilter(m_nMaxLengthOfDeviceName) });
+        String userID = mAuth.getUid();
+        String newMessage = etNewMessage.getText().toString();
+
+        Python py = Python.getInstance();
+        PyObject pyf = py.getModule("myscript"); // py file name
+        PyObject obj = pyf.callAttr("test", newMessage); // def name in py file
+
+        sentimentResult = obj.toString();
+        int mySentimentColor = 0;
+
+
+        if (sentimentResult.equals("0")){
+            mySentimentColor = Color.argb(255,239,228,210);
+            MainActivity.relative_color.setBackgroundColor(mySentimentColor);
+        }
+
+        else if (sentimentResult.equals("1")){
+            mySentimentColor = Integer.parseInt(MainActivity.joyColor);
+            MainActivity.relative_color.setBackgroundColor(mySentimentColor);
+        }
+
+        else if (sentimentResult.equals("2")){
+            mySentimentColor = Integer.parseInt(MainActivity.sadnessColor);
+            MainActivity.relative_color.setBackgroundColor(mySentimentColor);
+        }
+
+        else if (sentimentResult.equals("3")){
+            mySentimentColor = Integer.parseInt(MainActivity.angerColor);
+            MainActivity.relative_color.setBackgroundColor(mySentimentColor);
+        }
+
+        else if (sentimentResult.equals("4")){
+            mySentimentColor = Integer.parseInt(MainActivity.fearColor);
+            MainActivity.relative_color.setBackgroundColor(mySentimentColor);
+        }
+
+        else if (sentimentResult.equals("5")){
+            mySentimentColor = Integer.parseInt(MainActivity.disgustColor);
+            MainActivity.relative_color.setBackgroundColor(mySentimentColor);
+        }
+
+        else if (sentimentResult.equals("6")){
+            mySentimentColor = Integer.parseInt(MainActivity.restlessColor);
+            MainActivity.relative_color.setBackgroundColor(mySentimentColor);
+        }
+
+        TextItem mMessage = new TextItem(newMessage, strDate,String.valueOf(mySentimentColor));
+        myRef.child(userID).child("memo_list").push().setValue(mMessage);
+
+        progressDialog.dismiss();
+
+        MainActivity.lightOn(mySentimentColor);
+        Toast.makeText(TextActivity.this, "등록완료", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

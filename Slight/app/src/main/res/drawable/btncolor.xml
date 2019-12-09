@@ -14,7 +14,7 @@
                 <shape>
                     <corners android:radius="3dp" />
                     <solid android:color="#404040" />
-                    <stroke android:width="2dp" android:color="#f2c50a" />
+                    <stroke android:width="2dp" android:color="#FFCD4A" />
                 </shape>
             </item>
         </layer-list>

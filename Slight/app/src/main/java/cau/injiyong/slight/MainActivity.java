@@ -1,12 +1,13 @@
-
 package cau.injiyong.slight;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -18,10 +19,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
@@ -67,26 +74,26 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 
+import yuku.ambilwarna.AmbilWarnaDialog;//new colorpicker
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, ColorPickerDialog.OnColorChangedListener {
 
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "bluetooth2";
+    public static Context mContext;
 
+    int tColor, n=0; ////*****
 
-    //String strNickname, strProfile, strEmail, strAgeRange, strGender, strBirthday;
+    public static Activity activity;
 
-    androidx.constraintlayout.widget.ConstraintLayout relative_color;
-    Switch lightSwitch;
+    static androidx.constraintlayout.widget.ConstraintLayout relative_color;
+    static Switch lightSwitch;
     SeekBar seekbar;
     Button btncolor;
     Button btnbright;
     int color;
- //   TextView textview;
-//    TextView mTvBluetoothStatus;
-//    TextView mTvReceiveData;
- //   TextView mTvSendData;
+
     Button mBtnBluetoothOn;
     Button mBtnBluetoothOff;
     Button mBtnConnect;
@@ -94,25 +101,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Set<BluetoothDevice> mPairedDevices;
     List<String> mListPairedDevices;
     Handler mBluetoothHandler;
-    ConnectedBluetoothThread mThreadConnectedBluetooth;
+    static ConnectedBluetoothThread mThreadConnectedBluetooth;
     BluetoothDevice mBluetoothDevice; //기기의 장치정보, 다른 기기랑 연결
-    BluetoothSocket mBluetoothSocket; //폰과 디바이스간 통신 채널에 대응
-    SharedPreferences kbk;
-    SharedPreferences.Editor editor;
+    static BluetoothSocket mBluetoothSocket; //폰과 디바이스간 통신 채널에 대응
+    static SharedPreferences mSharedPreferences;
+    static SharedPreferences.Editor editor;
     final static int BT_REQUEST_ENABLE = 1;
     final static int BT_MESSAGE_READ = 2;
     final static int BT_CONNECTING_STATUS = 3;
     final static UUID BT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-
+    String userID;
     String voiceResult;
     String sentimentResult;
 
-    String joyColor;
-    String sadnessColor;
-    String angerColor;
-    String fearColor;
-    String disgustColor;
-    String restlessColor;
+    static String joyColor;
+    static String sadnessColor;
+    static String angerColor;
+    static String fearColor;
+    static String disgustColor;
+    static String restlessColor;
 
     FirebaseDatabase database;
     DatabaseReference myRef;
@@ -123,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView txt;
     //Voice 버튼
     Button btnVoice;
+    ProgressDialog progressDialog;
 
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
 
@@ -137,10 +145,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        kbk = getSharedPreferences("color",MODE_PRIVATE);
-        editor = kbk.edit();
+        mSharedPreferences = getSharedPreferences("color",MODE_PRIVATE);
+        editor = mSharedPreferences.edit();
+        mContext=this;
+        activity = MainActivity.this;
 
-        int x = kbk.getInt("myColor", 0);
+        int x = mSharedPreferences.getInt("myColor", 0);
+
+        final Paint mCenterPaint; ///***
+        mCenterPaint = new Paint(Paint.ANTI_ALIAS_FLAG); ///***
+        tColor = mCenterPaint.getColor();///**
+
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage("분석중....");
+        progressDialog.setCancelable(true);
+        progressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Horizontal);
+
 
         mBluetoothHandler = new Handler(){
             public void handleMessage(android.os.Message msg){
@@ -151,27 +171,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                //      mTvReceiveData.setText(readMessage);
                 }
             }
         };
         lightSwitch=(Switch)findViewById(R.id.lightSwitch);
         seekbar=(SeekBar)findViewById(R.id.seekBar1);
         btnbright=(Button)findViewById(R.id.btnbright);
-       // mTvBluetoothStatus = (TextView)findViewById(R.id.tvBluetoothStatus);
-      //  mTvReceiveData = (TextView)findViewById(R.id.tvReceiveData);
         mBtnBluetoothOn = (Button)findViewById(R.id.btnBluetoothOn);
-        mBtnBluetoothOff = (Button)findViewById(R.id.btnBluetoothOff);
+        //   mBtnBluetoothOff = (Button)findViewById(R.id.btnBluetoothOff);
         mBtnConnect = (Button)findViewById(R.id.btnConnect);
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); //해당 장치가 블루투스 기능을 지원하는지 알아오는 메소드
 
         if(mBluetoothAdapter != null && mBluetoothAdapter.isEnabled()){
-         //   mTvBluetoothStatus.setText("활성화");
-            bk("HC-06");
+            // 활성화
+            connectDevice("HC-06");
         }
         else{
-//            mTvBluetoothStatus.setText("비활성화");
+            // 비활성화
         }
 
 
@@ -181,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(lightSwitch.isChecked()==true){
                     Log.d("하....", "노답...");
                     if(mThreadConnectedBluetooth!=null){
-                        int x = kbk.getInt("myColor", 0);
+                        int x = mSharedPreferences.getInt("myColor", 0);
                         mThreadConnectedBluetooth.sendData("1");
                         String r = String.format("%s", Color.red(x));
                         mThreadConnectedBluetooth.sendData(r);
@@ -203,15 +220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                bk_1 = seekbar.getProgress();
-                /*
-                if(mThreadConnectedBluetooth!=null){
-                    mThreadConnectedBluetooth.sendData("4");
-                    Log.d("병국", bk_1 + "");
-                    mThreadConnectedBluetooth.sendData(Integer.toString(bk_1));
-                }
 
-                 */
             }
 
             @Override
@@ -227,30 +236,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 bk_1 = seekbar.getProgress();
-                /*
-                if(mThreadConnectedBluetooth!=null){
-                    mThreadConnectedBluetooth.sendData("4");
-                    Log.d("병국", bk_1 + "");
-                    mThreadConnectedBluetooth.sendData(Integer.toString(bk_1));
+
+                if (progress < 20){
+                    seekBar.setProgress(20); // magic solution, ha
                 }
 
-                 */
             }
         });
+
 
 
         mBtnBluetoothOn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bluetoothOn();
+                if(mBtnBluetoothOn.getText().equals("블루투스 ON")) {
+                    mBtnBluetoothOn.setText("블루투스 OFF");
+                    mBtnBluetoothOn.setTextColor(Color.rgb(255,205,74));
+
+                    Drawable btncolor = getResources().getDrawable(R.drawable.btncolor);
+                    btncolor.setColorFilter(0, PorterDuff.Mode.SRC_ATOP);
+                    mBtnBluetoothOn.setBackground(btncolor);
+
+                    bluetoothOn();
+                }
+                else {
+                    mBtnBluetoothOn.setText("블루투스 ON");
+                    mBtnBluetoothOn.setTextColor(Color.rgb(64,64,64));
+
+                    Drawable roundDrawable = getResources().getDrawable(R.drawable.btncolor);
+                    roundDrawable.setColorFilter(-12982, PorterDuff.Mode.SRC_ATOP);
+                    mBtnBluetoothOn.setBackground(roundDrawable);
+
+                    bluetoothOff();
+                }
             }
         });
-        mBtnBluetoothOff.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                bluetoothOff();
-            }
-        });
+
         mBtnConnect.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -266,36 +287,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         relative_color = (androidx.constraintlayout.widget.ConstraintLayout)findViewById(R.id.relative_color);
         relative_color.setBackgroundColor(x);
 
-//        if (! Python.isStarted())
-//            Python.start(new AndroidPlatform(this));
-
-        String userID=mAuth.getUid();
+        userID=mAuth.getUid();
 
         myRef.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                joyColor = String.valueOf(dataSnapshot.child("color").child("joy"));
-                sadnessColor = String.valueOf(dataSnapshot.child("color").child("sadness"));
-                angerColor = String.valueOf(dataSnapshot.child("color").child("anger"));
-                fearColor = String.valueOf(dataSnapshot.child("color").child("fear"));
-                disgustColor = String.valueOf(dataSnapshot.child("color").child("disgust"));
-                restlessColor = String.valueOf(dataSnapshot.child("color").child("restless"));
+                joyColor = String.valueOf(dataSnapshot.child("color").child("joy").getValue());
+                sadnessColor = String.valueOf(dataSnapshot.child("color").child("sad").getValue());
+                angerColor = String.valueOf(dataSnapshot.child("color").child("anger").getValue());
+                fearColor = String.valueOf(dataSnapshot.child("color").child("fear").getValue());
+                disgustColor = String.valueOf(dataSnapshot.child("color").child("disgust").getValue());
+                restlessColor = String.valueOf(dataSnapshot.child("color").child("restless").getValue());
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-//
-//        Python py = Python.getInstance();
-//        PyObject pyf = py.getModule("myscript"); // py file name
-//        PyObject obj = pyf.callAttr("test", ""); // def name in py file
-//        textview = findViewById(R.id.pytext);
-//        textview.setText(obj.toString());
+
+        if (! Python.isStarted())
+            Python.start(new AndroidPlatform(this));
 
         btncolor = (Button)findViewById(R.id.btncolor);
-        btncolor.setOnClickListener(this);
+        btncolor.setOnClickListener(new View.OnClickListener() { //*****
+            @Override
+            public void onClick(View v) {
+                n=1;
+                openColorPicker();
+            }
+        });
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO)
@@ -314,13 +335,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
-        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, new Long(5000));
+        // intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, new Long(5000));
         mRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
         mRecognizer.setRecognitionListener(recognitionListener);
-
-
-        txt = (TextView) findViewById(R.id.txt);
-
 
         btnVoice.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -350,8 +367,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v ){
 
-                Intent intent=new Intent(getApplicationContext(),
-                        Setting.class); //넘어갈 클래스
+                Intent intent=new Intent(getApplicationContext(), Setting.class); //넘어갈 클래스
                 startActivity(intent);
             }
         });
@@ -368,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     connectSelectedDevice("HC-06");
                 }
                 Toast.makeText(getApplicationContext(), "블루투스가 이미 활성화 되어 있습니다.", Toast.LENGTH_LONG).show();
-             //   mTvBluetoothStatus.setText("활성화");
+                //   mTvBluetoothStatus.setText("활성화");
             }
             else {
                 Toast.makeText(getApplicationContext(), "블루투스가 활성화 되어 있지 않습니다.", Toast.LENGTH_LONG).show();
@@ -386,7 +402,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mBluetoothAdapter.isEnabled()) {
             mBluetoothAdapter.disable();
             Toast.makeText(getApplicationContext(), "블루투스가 비활성화 되었습니다.", Toast.LENGTH_SHORT).show();
-          //  mTvBluetoothStatus.setText("비활성화");
+            //  mTvBluetoothStatus.setText("비활성화");
         }
         else {
             Toast.makeText(getApplicationContext(), "블루투스가 이미 비활성화 되어 있습니다.", Toast.LENGTH_SHORT).show();
@@ -398,13 +414,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case BT_REQUEST_ENABLE:
                 if (resultCode == RESULT_OK) { // 블루투스 활성화를 확인을 클릭하였다면
                     Toast.makeText(getApplicationContext(), "블루투스 활성화", Toast.LENGTH_LONG).show();
-                //    mTvBluetoothStatus.setText("활성화");
+                    //    mTvBluetoothStatus.setText("활성화");
                     if(mPairedDevices != null && mPairedDevices.size() > 0){
                         connectSelectedDevice("HC-06");
                     }
                 } else if (resultCode == RESULT_CANCELED) { // 블루투스 활성화를 취소를 클릭하였다면
                     Toast.makeText(getApplicationContext(), "취소", Toast.LENGTH_LONG).show();
-                 //   mTvBluetoothStatus.setText("비활성화");
+                    //   mTvBluetoothStatus.setText("비활성화");
                 }
                 break;
         }
@@ -412,7 +428,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void bk(String s){
+    public void connectDevice(String s){
         mPairedDevices = mBluetoothAdapter.getBondedDevices();
         if(mPairedDevices.size() > 0){
             connectSelectedDevice("HC-06");
@@ -440,21 +456,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mListPairedDevices.toArray(new CharSequence[mListPairedDevices.size()]);
 
 
-//                if(items.length >= 1){
-//                    connectSelectedDevice(items[0].toString());
-//                }
-
-
-
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
 
-//                       txt.setText(Integer.toString(item));
                         Log.d("ㅇㅂㅇ", items[item].toString());
-                       connectSelectedDevice(items[item].toString());
+                        connectSelectedDevice(items[item].toString());
 
-//                        txt.setText(items[item].toString() + items[item].toString());
                     }
                 });
                 AlertDialog alert = builder.create();
@@ -480,7 +488,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mThreadConnectedBluetooth = new ConnectedBluetoothThread(mBluetoothSocket);
             mThreadConnectedBluetooth.start();
             mBluetoothHandler.obtainMessage(BT_CONNECTING_STATUS, 1, -1).sendToTarget();
-            Toast.makeText(getApplicationContext(), "블루투스 연결 성공!!! ㅊㅊㅊ", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "블루투스 연결 성공", Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             Toast.makeText(getApplicationContext(), "블루투스 연결 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
         }
@@ -491,12 +499,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
 
-
         public ConnectedBluetoothThread(BluetoothSocket socket) {
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
-
 
             try {
                 tmpIn = socket.getInputStream();
@@ -509,7 +515,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mmOutStream = tmpOut;
 
         }
-
 
         public void run() {
             byte[] buffer = new byte[1024];
@@ -529,14 +534,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
+
         public void write(String str) {
-//            byte[] bytes = str.getBytes();
-//            try {
-//                mmOutStream.write(bytes);
-//            } catch (IOException e) {
-//                Toast.makeText(getApplicationContext(), "데이터 전송 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
-//            }
-            //Log.d(TAG, "...Data to send: " + str + "...");
             byte[] msgBuffer = str.getBytes();
             try {
                 mmOutStream.write(msgBuffer);
@@ -558,7 +557,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-
         public void cancel() {
             try {
                 mmSocket.close();
@@ -569,51 +567,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    @Override
-    public void onClick(View v) {
-        if(mBluetoothAdapter != null && mBluetoothAdapter.isEnabled() && !lightSwitch.isChecked())
-            lightSwitch.setChecked(true);
-        color = PreferenceManager.getDefaultSharedPreferences(this).getInt("color", Color.WHITE);
-        new ColorPickerDialog(this, this, color).show();
+
+    public void openColorPicker() {    ///***
+
+
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("color", tColor).commit();
+
+        AmbilWarnaDialog colorPicker = new AmbilWarnaDialog(this, tColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+
+            @Override
+            public void onCancel(AmbilWarnaDialog dialog) {
+            }
+
+            @Override
+            public void onOk(AmbilWarnaDialog dialog, int color) {
+
+                tColor = color;
+                editor.putInt("myColor", tColor);
+                editor.commit();
+                int x = mSharedPreferences.getInt("myColor", 0);
+                if( n == 1) {
+                    relative_color.setBackgroundColor(tColor);
+                }
+
+                lightSwitch.setChecked(true);
+                if(mThreadConnectedBluetooth != null) {
+                    mThreadConnectedBluetooth.sendData("3");
+
+                    String r = String.format("%s", Color.red(tColor));
+                    mThreadConnectedBluetooth.sendData(r);
+                    String g = String.format("%s", Color.green(tColor));
+                    mThreadConnectedBluetooth.sendData(g);
+                    String b = String.format("%s", Color.blue(tColor));
+                    mThreadConnectedBluetooth.sendData(b);
+                }
+
+            }
+
+
+        });
+
+        colorPicker.show();
     }
 
-    @Override
-    public void colorChanged(int color) {
-
-        editor.putInt("myColor", color);
-        editor.commit();
-        int x = kbk.getInt("myColor", 0);
-        Log.d("여기는?",x + "");
-
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("color", color).commit();
-        relative_color.setBackgroundColor(color);
-
-        if(mThreadConnectedBluetooth != null) {
-            mThreadConnectedBluetooth.sendData("3");
-
-            String r = String.format("%s", Color.red(color));
-            mThreadConnectedBluetooth.sendData(r);
-            String g = String.format("%s", Color.green(color));
-            mThreadConnectedBluetooth.sendData(g);
-            String b = String.format("%s", Color.blue(color));
-            mThreadConnectedBluetooth.sendData(b);
-        }
-        //txt.setText("r =" + r + " g =" + g + " b=" + b);
-        String hexColor = String.format("#%06X", (0xFFFFFF & color));
-        String userID = mAuth.getUid();
-        myRef.child(userID).child("current_color").setValue(hexColor);
-
-    }
 
     private RecognitionListener recognitionListener = new RecognitionListener() {
         @Override
         public void onReadyForSpeech(Bundle bundle) {
             btnVoice.setBackgroundResource(R.drawable.vs_micbtn_on);
+            Toast.makeText(getApplicationContext(), "지금 말해주세요", Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onBeginningOfSpeech() {
-            //Toast.makeText(getApplicationContext(), "말이 시작된 부분", Toast.LENGTH_LONG).show();
+            //말이 시작된 부분
         }
 
         @Override
@@ -626,7 +633,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onEndOfSpeech() {
-
+            btnVoice.setBackgroundResource(R.drawable.vs_micbtn_off);
+            progressDialog.show(); //로딩창 보여주기
         }
 
         @Override
@@ -638,6 +646,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onResults(Bundle bundle) {
+
             String key = "";
             key = SpeechRecognizer.RESULTS_RECOGNITION;
             ArrayList<String> mResult = bundle.getStringArrayList(key);
@@ -645,46 +654,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String[] rs = new String[mResult.size()];
             mResult.toArray(rs);
 
-            txt.setText(rs[0]);
-
             voiceResult = rs[0];
+            int mySentimentColor=runPy(voiceResult);
+            updateToDB(mySentimentColor);
+            progressDialog.dismiss(); //로딩창 사라짐
 
-            if (! Python.isStarted())
-                Python.start(new AndroidPlatform(getApplicationContext()));
-
-            Python py = Python.getInstance();
-            PyObject pyf = py.getModule("myscript"); // py file name
-            PyObject obj = pyf.callAttr("test", voiceResult); // def name in py file
-
-            sentimentResult = obj.toString();
-            int mySentimentColor = 0;
-
-            if (sentimentResult.equals("1"))
-                mySentimentColor = Integer.parseInt(joyColor);
-
-            else if (sentimentResult.equals("2"))
-                mySentimentColor = Integer.parseInt(sadnessColor);
-
-            else if (sentimentResult.equals("3"))
-                mySentimentColor = Integer.parseInt(angerColor);
-
-            else if (sentimentResult.equals("4"))
-                mySentimentColor = Integer.parseInt(fearColor);
-
-            else if (sentimentResult.equals("5"))
-                mySentimentColor = Integer.parseInt(disgustColor);
-
-            else if (sentimentResult.equals("6"))
-                mySentimentColor = Integer.parseInt(restlessColor);
-
-            mThreadConnectedBluetooth.sendData("3");
-
-            String sr = String.format("%s",Color.red(mySentimentColor));
-            mThreadConnectedBluetooth.sendData(sr);
-            String sg = String.format("%s",Color.green(mySentimentColor));
-            mThreadConnectedBluetooth.sendData(sg);
-            String sb = String.format("%s",Color.blue(mySentimentColor));
-            mThreadConnectedBluetooth.sendData(sb);
+            if (mBluetoothAdapter.isEnabled())
+                lightOn(mySentimentColor);
+            else
+                Toast.makeText(getApplicationContext(), "연결된 기기가 없습니다.", Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -696,16 +674,110 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
+
+
+    public int runPy(String text){
+
+        Python py = Python.getInstance();
+        PyObject pyf = py.getModule("myscript"); // py file name
+        PyObject obj = pyf.callAttr("test", text); // def name in py file
+
+        sentimentResult = obj.toString();
+        int mySentimentColor = 0;
+
+        if (sentimentResult.equals("0")){
+            mySentimentColor = Color.argb(255,239,228,210);
+            relative_color.setBackgroundColor(mySentimentColor);
+            // myRef.child(userID).child("result").push().setValue("default");
+        }
+
+        else if (sentimentResult.equals("1")){
+            mySentimentColor = Integer.parseInt(joyColor);
+            relative_color.setBackgroundColor(mySentimentColor);
+            // myRef.child(userID).child("result").push().setValue("joy");
+        }
+
+        else if (sentimentResult.equals("2")){
+            mySentimentColor = Integer.parseInt(sadnessColor);
+            relative_color.setBackgroundColor(mySentimentColor);
+            // myRef.child(userID).child("result").push().setValue("sadness");
+        }
+
+        else if (sentimentResult.equals("3")){
+            mySentimentColor = Integer.parseInt(angerColor);
+            relative_color.setBackgroundColor(mySentimentColor);
+            // myRef.child(userID).child("result").push().setValue("anger");
+        }
+
+        else if (sentimentResult.equals("4")){
+            mySentimentColor = Integer.parseInt(fearColor);
+            relative_color.setBackgroundColor(mySentimentColor);
+            // myRef.child(userID).child("result").push().setValue("fear");
+        }
+
+        else if (sentimentResult.equals("5")){
+            mySentimentColor = Integer.parseInt(disgustColor);
+            relative_color.setBackgroundColor(mySentimentColor);
+            // myRef.child(userID).child("result").push().setValue("disgust");
+        }
+
+        else if (sentimentResult.equals("6")){
+            mySentimentColor = Integer.parseInt(restlessColor);
+            relative_color.setBackgroundColor(mySentimentColor);
+            // myRef.child(userID).child("result").push().setValue("restless");
+        }
+
+        return mySentimentColor;
+    }
+
+    public static void logoutoff(){
+        mThreadConnectedBluetooth.sendData("2");
+
+        try {
+            mBluetoothSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void lightOn(int mySentimentColor){
+
+        mThreadConnectedBluetooth.sendData("3");
+
+        String sr = String.format("%s",Color.red(mySentimentColor));
+        mThreadConnectedBluetooth.sendData(sr);
+        String sg = String.format("%s",Color.green(mySentimentColor));
+        mThreadConnectedBluetooth.sendData(sg);
+        String sb = String.format("%s",Color.blue(mySentimentColor));
+        mThreadConnectedBluetooth.sendData(sb);
+
+        lightSwitch.setChecked(true);
+        int jColor = mySentimentColor;
+        editor.putInt("myColor", jColor);
+        editor.commit();
+        int x = mSharedPreferences.getInt("myColor", 0);
+        Toast.makeText(mContext, "인식완료", Toast.LENGTH_LONG).show();
+    }
+
+    public void updateToDB(int color){
+
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", java.util.Locale.getDefault());
+        String strDate = dateFormat.format(date);
+
+        TextItem mMessage = new TextItem(voiceResult, strDate, String.valueOf(color));
+        myRef.child(userID).child("memo_list").push().setValue(mMessage);
+
+    }
+
     @Override
     public void onBackPressed(){            //BACK키가 눌렸을 때의 함수로 Override하여 사용합니다.
 
         if ( flag_BackKey == false ){
 
             // 첫 번째로 클릭했을 경우로, false에서 true로 바꿔줍니다.
-
             flag_BackKey = true;
-
-
 
             currentTime = Calendar.getInstance().getTimeInMillis();       //Java의 Calendar를 import하여 사용합니다.
 
@@ -739,9 +811,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void startTimer() {                                    //2초의 시간적 여유를 가지도록 Delay 시킵니다.
-
         backTimerHandler.sendEmptyMessageDelayed(MSG_TIMER , BACKKEY_TIMEOUT * IN_MILLISEC );
-
     }
 
 
@@ -757,12 +827,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     flag_BackKey = false;
 
                 }
-
                 break;
-
             }
-
         }
-
     };
 }

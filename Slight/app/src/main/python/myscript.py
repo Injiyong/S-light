@@ -10,6 +10,7 @@ import nltk
 
 
 def test(input_):
+
     nltk.data.path.append("/data/data/cau.injiyong.slight/files/nltk_data")
 
     B_INCR = 0.293
@@ -50,153 +51,169 @@ def test(input_):
          "sort of": B_DECR, "sorta": B_DECR, "sortof": B_DECR, "sort-of": B_DECR}
 
     JOY = \
-        ['fun', 'amusement', 'interest', 'exciting', 'happy', 'pleasant', 'enjoyable', 'joyful', 'cheerful', 'happy', 'merry',
-         'delightful', 'exhilarating', 'boon', 'simpatico', 'mirthful', 'roth', 'riant', 'joyous', 'rollicking','wondweful', 'kicking',
-         'stirring', 'glad', 'stoked'
-                             'desire', 'wish', 'aspiration', 'avid', 'relieved', 'unburdened', 'gratifying', 'satisfying', 'dramatic', 'moving', 'touching',
-         'overwhelming', 'thrilled', 'wonder', 'awe', 'marvel', 'impressive', 'ecstasy', 'rapture', 'blissful', 'entrancing', 'charming',
-         'nympholepsy', 'jolly', 'rosy', 'hopeful', 'bright', 'wishful', 'content', 'heartwarming', 'sufficient', 'ample', 'enough',
-         'pride', 'proud', 'achievement', 'accomplishment', 'fulfillment', 'worthwhile', 'fruitful', 'rewarding', 'boast', 'honor', 'glory',
-         'kudos', 'honour', 'priviledge', 'triumph', 'jubilance', 'ravishment', 'arouse', 'luck', 'fortune', 'relief', 'comfortable',
-         'relaxed', 'easy', 'comfy', 'peaceful', 'calm', 'restful', 'quiet', 'informal', 'homey', 'love', 'cherish', 'beloved', 'lurve',
-         'romance', 'caritas', 'thankful', 'grateful', 'obliged', 'glad', 'thankworthy', 'welcome', 'inspiring', 'flutter']
+        ['cute', 'smile', 'good', 'nice', 'cheerful', 'commanding', 'loving', 'hilarious', 'flutter', 'fun','funny', 'amusement', 'interest','interesting','interested', 'excite', 'exciting','excited', 'pleasant','pleasantly',
+         'pleasure', 'enjoyable','enjoy', 'joyful','joy', 'cheer','cheery','cheerful', 'happy', 'happily','merry', 'delightful','delight',
+         'exhilarating','exhilarate', 'boon','exhilarated', 'simpatico', 'mirthful',  'riant','joy', 'joyous', 'rollicking','rollick','wonderful',
+         'glad','gladly', 'desire','desired', 'desirable','wish','wishes','aspire', 'aspiration', 'avid', 'relieve','relieving','relieved',
+         'unburdened', 'unburden' ,'gratifying','gratify', 'gratified', 'satisfy','satisfaction','satisfied','satisfying', 'dramatic', 'moving',
+         'touching', 'overwhelming','overwhelmed','overwhelm' ,'wonder', 'awe', 'marvel','marvelous', 'impressive',
+         'impressed','impressing','impress' ,'ecstasy','ecstatic', 'rapture','raptured', 'blissful','bliss', 'entrancing','entranced', 'charming','charm',
+         'nympholepsy', 'jolly', 'rosy', 'hopeful','hope','hopes','hopefully', 'bright','brightly', 'wishful', 'content', 'heartwarming', 'sufficient',
+         'ample', 'enough', 'pride', 'proud','achieve', 'achievement','accomplish', 'accomplishment', 'fulfillment','fulfill', 'worthwhile', 'fruitful',
+         'rewarding', 'boast','boastful', 'honor','honored' ,'glory','glorious', 'kudos', 'honour','honoured', 'priviledge', 'triumph', 'jubilance',
+         'arouse','aroused','lucky', 'luck', 'fortune','fortunate', 'relief', 'comfortable','comfort','relax','relaxing', 'relaxed', 'easy', 'comfy',
+         'peaceful','peace', 'calm', 'restful','rest', 'quiet', 'informal', 'homey', 'love','loved', 'cherish', 'beloved', 'lurve', 'romance', 'caritas',
+         'thankful','thanks','thank', 'grateful', 'obliged',  'thankworthy', 'welcome','welcoming','welcomes', 'inspiring', 'inspire', 'inspired','flutter']
 
     SADNESS = \
-        ['futility', 'vain', 'futlie', 'nihilism', 'fugacious', 'idle', 'dejected', 'dispirited', 'despondent', 'hollow',
-         'resign', 'empty', 'boring', 'tiresome', 'wearisome', 'irksome', 'longwinded', 'dull', 'tedious', 'monotonous', 'lengthy', 'stodgy',
-         'regret', 'repent', 'rue', 'remorse', 'lonely', 'solitary', 'lonesome', 'melancholy', 'forlorn', 'gloomy', 'desolated',
-         'reclusive', 'moody', 'desert', 'alienation', 'isolated', 'depressed', 'loss', 'dejection', 'gessepany', 'sad', 'plaintive',
-         'disconsolate', 'moody', 'grief', 'plead', 'sob', 'morn', 'doleful', 'unhappy', 'hurt', 'unfair', 'cruel', 'unfeeling', 'heartless',
-         'harsh', 'coldly', 'bitter', 'upset', 'destressed', 'annoyed']
+        ['alone', 'coldhearted', 'unkind','bereft', 'bereavement', 'apathetic', 'apathy', 'crying', 'cry', 'cries', 'cried', 'disastrous', 'moldy', 'futility', 'vain','vanity', 'futlie', 'nihilism', 'fugacious', 'idle', 'dejected','deject','dejects','dejecting', 'dispirited','dispirit',
+         'dispiriting','dispirits' 'despondent','despond','desponding','despondency','hollowed', 'hollow',
+         'resign','resignation','resigning','resigned', 'empty', 'boredom', 'bored' ,'boring', 'tiresome', 'wearisome', 'irksome', 'longwinded', 'dull', 'tedious',
+         'monotonous', 'lengthy', 'stodgy',
+         'regret','regrets', 'repent','repents','repenting', 'rue','rues','rueing', 'remorse', 'lonely', 'solitary','solitarily', 'lonesome', 'melancholy',
+         'forlorn', 'gloomy', 'desolate','desolating','desolated',
+         'reclusive','reclusively', 'moody', 'desert','deserted', 'alienation','alienate','alienated','alienating', 'isolate', 'isolating', 'isolated',
+         'depressed','depress','depressing','losses', 'loss','deject','dejected', 'dejection', 'gessepany', 'sad', 'sadly','sadness','plaintive',
+         'disconsolate', 'grief','grieve','grieving','grieved', 'plead','plea', 'sob', 'morn', 'doleful', 'unhappy', 'hurts','hurt', 'unfair','unfairness',
+         'cruelty', 'cruel', 'unfeeling', 'heartless', 'harsh', 'coldly', 'bitter','bitterness', 'upset']
 
     ANGER = \
-        ['fucking', 'dratted', 'offenseful', 'hateful', 'detestable', 'naughty', 'dislike', 'hostility', 'antaginism', 'animosity',
-         'antipathy', 'disapproval', 'animus', 'enmity', 'anger', 'rage', 'fury', 'resentment', 'indignation', 'wrath', 'enrage', 'ire',
-         'bile', 'mortifying', 'affronted', 'dodgasted', 'outrage', 'exasperation', 'displeased', 'miffy', 'pained', 'irritating',
-         'raspingly', 'betray', 'treachery', 'vexation', 'grudge', 'reproachful', 'dissatisfaction', 'discontent', 'complaint',
-         'oppression', 'dejection', 'abaissement', 'mortification', 'disappoint', 'envy', 'jealous', 'aggravated', 'peeve',
+        ['frown', 'frowning','annoy','annoying', 'annoyed', 'calamity', 'angry','anger', 'fucking', 'dratted','drat', 'offenseful','offense','hate', 'hateful', 'detest', 'detestable', 'naughty', 'dislike', 'hostility',
+         'antaginism', 'animosity','hatred',
+         'antipathy', 'disapproval','disapprove', 'animus', 'enmity', 'rage', 'fury', 'resentment','resent', 'indignation', 'wrath', 'enrage', 'ire',
+         'bile', 'mortify', 'mortified', 'mortifying', 'affront', 'affronting', 'affronted', 'dodgasted', 'outraged', 'outrage', 'exasperation','exasperate',
+         'exasperating', 'exasperated', 'displease','displeasing', 'displeased', 'miffy', 'pained', 'irritate','irritates', 'irritating',
+         'raspingly', 'betray', 'treachery', 'vex', 'vexation', 'grudge','reproach', 'reproachful', 'dissatisfaction', 'discontent', 'complaint',
+         'oppression','oppress', 'oppressed', 'abaissement', 'mortification', 'disappoint','disappointed','disappointment','disappointing', 'envy', 'jealous',
+         'aggravate','aggravating', 'aggravated', 'peeve','peeved',
          'nasty', 'saucy', 'cheeky', 'pert', 'spiteful', 'impudent', 'mad']
 
     FEAR = \
-        ['frightening', 'terrifying', 'horrifying', 'ghastly', 'gruesome', 'macabre', 'eldritch', 'unearthly', 'gooseflesh', 'hideous',
-         'terrible', 'grisly', 'creepy', 'fearful', 'afraid', 'scared', 'dreaded', 'bogey', 'horrific', 'shock', 'stun', 'astonished',
-         'astounded', 'startled', 'anxious', 'apprehension', 'unessiness', 'nervous', 'edgy', 'impatient', 'jittery', 'clutched', 'fretted']
+        ['strange', 'retaliation', 'threaten','threatening','threat', 'menacing', 'menace', 'thrilled','thrill','thrilling', 'bloodcurdling','eerie','uncanny', 'agony', 'agonize', 'breakup', 'frightening','frightened','frighten','fright', 'terrifying','terrify','terrified', 'horrify','horror', 'horrifying', 'ghastly', 'gruesome', 'macabre',
+         'eldritch', 'unearthly', 'gooseflesh', 'hideous', 'terrible', 'grisly', 'creepy','fear', 'fearful','feared', 'afraid','scare', 'scared',
+         'dreaded','dread', 'bogey', 'horrific', 'shock','shocked', 'stun', 'astonished','astonish','astonished','astonishing', 'impatience', 'astounded',
+         'astound','astounding', 'startled','startle', 'anxious','anxiousness', 'apprehension', 'uneasiness','uneasy', 'nervous', 'edgy', 'impatient',
+         'jittery', 'clutched', 'fretted', 'scary','painful']
 
     DISGUST = \
-        ['abominate', 'loath', 'detastation', 'abhorrence', 'revulsion', 'aversion', 'repugnance', 'disrelish', 'contempt',
-         'scorn', 'despise', 'contemn', 'disgusting', 'nauseating', 'yucky', 'sickening', 'repellent', 'repulsive', 'disillusion',
-         'unpleasant', 'discomfort', 'uneasiness', 'unpleasure', 'disamenity', 'umbrage', 'queerness']
+        ['stinc','stinky', 'stinken', 'vomit', 'venomous', 'nausea','abominate', 'abomination', 'loath', 'abhorrence','abhorre', 'revulsion', 'aversion', 'repugnance', 'disrelish', 'contempt',
+         'scorn', 'despise', 'contemn', 'disgusting','disgust', 'nauseating', 'yucky', 'sickening', 'repellent', 'repulsive', 'disillusion','disillusionment',
+         'unpleasant', 'discomfort', 'unpleasure', 'disamenity', 'umbrage', 'queerness']
 
     RESTLESS = \
-        ['pathetic', 'wailful', 'ardent', 'homesick', 'miss', 'yearn', 'longing', 'sympathy', 'pity', 'compassion', 'miserable',
-         'lacerant', 'woeful', 'poor', 'wretch', 'commiserable', 'sorry', 'worry', 'concern', 'care', 'enbarrassed', 'disconcerted',
-         'confuse', 'puzzled', 'perplexed', 'dilemma', 'baffled', 'absurd', 'ridiculous', 'nonsensial', 'preposterous', 'sublime',
-         'ashamed', 'shameful', 'disgraceful', 'reprehensible', 'inglorious', 'bashful', 'shy', 'wusted', 'cringeworthy', 'unmentionable',
-         'humiliated', 'ignominious', 'opprobrious', 'guilt', 'compunction', 'disturbed', 'complicated', 'intricacy', 'involution',
-         'stuffy', 'stifling', 'suffocating', 'airless', 'poky', 'afflicting', 'dismal', 'direful', 'crushing', 'despair', 'hopelessness',
-         'frustration', 'discourageed', 'reversal', 'backset', 'flameout', 'unhappiness', 'misfortune', 'unfortunate', 'unlucky', 'painful',
-         'distressed', 'stern', 'urgent', 'desperate', 'stringent', 'clamant', 'impend']
-    JoySum = 0
-    SadnessSum = 0
-    AngerSum = 0
-    FearSum = 0
-    DisgustSum = 0
-    RestlessSum = 0
+        ['ill', 'ache', 'diseased', 'disease', 'sick', 'weary', 'depleted', 'tired','sleepy', 'helpless', 'restless', 'pathetic','pathetically', 'wailful', 'ardent', 'homesick', 'miss','misses','missed', 'yearn','yearning','yearns', 'longing', 'sympathy','sympathetic',
+         'sympathize', 'pity','pitiable', 'compassion','compassionate', 'miserable',
+         'lacerant', 'woeful', 'poor', 'wretch', 'commiserable', 'sorry', 'worry','worries','worried', 'concern', 'care','cares', 'enbarrassed','enbarrass',
+         'enbarrassing', 'disconcerted','disconcert','disconcerting',
+         'confuse','confused','confusing','confusement', 'puzzling', 'puzzled', 'perplex' , 'perplexing', 'perplexed', 'dilemma', 'baffled', 'absurd',
+         'ridiculous', 'nonsensial', 'preposterous', 'sublime',
+         'shame', 'ashamed', 'shameful','shame', 'disgrace', 'disgraceful', 'reprehensible', 'inglorious', 'bashful', 'shy', 'wusted', 'cringeworthy', 'unmentionable',
+         'humiliated','humiliate','humiliation', 'humiliating', 'ignominious', 'opprobrious', 'guilt','guilty', 'compunction', 'disturbed','disturbing','disturbes',
+         'complicated', 'intricacy', 'involution', 'stuffy', 'stifling', 'stifle', 'stifles', 'suffocates', 'suffocate', 'suffocated', 'suffocating','disheartened',
+         'airless', 'poky', 'afflicting','affliction','afflict', 'afflicts', 'dismal', 'direful', 'crushing', 'despair', 'hopelessness','hopeless','frustrate',
+         'frustration','frustrating','frustrated', 'discourageed', 'reversal', 'backset', 'flameout', 'unhappiness', 'misfortune', 'unfortunate', 'unlucky',
+         'distressed', 'stern', 'urgent', 'desperate', 'stringent','stringently', 'clamant','clamantly', 'impend','impending', 'impendly']
+    try:
+        JoySum = 0
+        SadnessSum = 0
+        AngerSum = 0
+        FearSum = 0
+        DisgustSum = 0
+        RestlessSum = 0
 
-    ko_blob = textblob.TextBlob(input_)
-    if ko_blob.detect_language() == 'en':
-        input_text = ko_blob
-    else:
-        input_text = ko_blob.translate(to='en')
-    input_text = str(input_text)
+        ko_blob = textblob.TextBlob(input_ + " (s)")
 
-    input_strings = nltk.tokenize.sent_tokenize(input_text)
+        if ko_blob.detect_language() == 'en':
+            input_text = ko_blob
+        else:
+            input_text = ko_blob.translate(from_lang='ko', to='en')
+        input_text = str(input_text.lower())
 
-    vector = CountVectorizer()
-    countVec = vector.fit_transform(input_strings).toarray()
+        input_strings = nltk.tokenize.sent_tokenize(input_text)
 
-    input_words = []
-    for i in range(len(countVec)):
-        tokenizer=nltk.tokenize.TreebankWordTokenizer()
-        input_words.append(tokenizer.tokenize(input_strings[i]))
+        vector = CountVectorizer()
+        countVec = vector.fit_transform(input_strings).toarray()
 
+        input_words = []
+        for i in range(len(countVec)):
+            tokenizer=nltk.tokenize.TreebankWordTokenizer()
+            input_words.append(tokenizer.tokenize(input_strings[i]))
 
-    countVec = np.asfarray(countVec)
+        countVec = np.asfarray(countVec)
 
-    neg_words = []
-    neg_words.extend(NEGATE)
+        neg_words = []
+        neg_words.extend(NEGATE)
 
-    for i in range(len(countVec)):
-        for k, word in enumerate(input_words[i]):
+        for i in range(len(countVec)):
+            for k, word in enumerate(input_words[i]):
+                if (word in neg_words) and (word in vector.vocabulary_):
 
-            if (word in neg_words) and (word in vector.vocabulary_):
+                    if (countVec[i, vector.vocabulary_[word]] > 0):
+                        if (k + 2 < len(input_words[i])):
+                            word1 = input_words[i][k + 1]
+                            word2 = input_words[i][k + 2]
+                            if word1 in vector.vocabulary_:
+                                countVec[i, vector.vocabulary_[word1]] -= 0.59
+                            if word2 in vector.vocabulary_:
+                                if word1 in neg_words:
+                                    pass
+                                else:
+                                    countVec[i, vector.vocabulary_[word2]] -= 0.59
 
-                if (countVec[i, vector.vocabulary_[word]] > 0):
-                    if (k + 2 < len(input_words[i])):
+                        elif (k + 1 < len(input_words[i])):
+                            word1 = input_words[i][k + 1]
+                            if word1 in vector.vocabulary_:
+                                countVec[i, vector.vocabulary_[word1]] -= 0.59
+                        else:
+                            pass
+
+                scalar = 0.0
+
+                if word in BOOSTER_DICT:
+                    scalar = BOOSTER_DICT[word]
+                if scalar != 0 and (word in vector.vocabulary_):
+                    if (k + 1 < len(input_words[i])):
                         word1 = input_words[i][k + 1]
-                        word2 = input_words[i][k + 2]
                         if word1 in vector.vocabulary_:
-                            countVec[i, vector.vocabulary_[word1]] -= 0.59
-                        if word2 in vector.vocabulary_:
-                            if word1 in neg_words:
-                                pass
-                            else:
-                                countVec[i, vector.vocabulary_[word2]] -= 0.59
+                            countVec[i, vector.vocabulary_[word1]] += scalar
 
-                    elif (k + 1 < len(input_words[i])):
-                        word1 = input_words[i][k + 1]
-                        if word1 in vector.vocabulary_:
-                            countVec[i, vector.vocabulary_[word1]] -= 0.59
-                    else:
-                        pass
+        countVec = np.maximum(0, countVec)
 
-            scalar = 0.0
+        delta = 10**(-9)
+        resVec = np.maximum(0, 1 + np.log(countVec + delta))
 
-            if word in BOOSTER_DICT:
-                scalar = BOOSTER_DICT[word]
-            if scalar != 0 and (word in vector.vocabulary_):
-                if (k + 1 < len(input_words[i])):
-                    word1 = input_words[i][k + 1]
-                    if word1 in vector.vocabulary_:
-                        countVec[i, vector.vocabulary_[word1]] += scalar
+        lambda_ = 0.05
+        tfidfv = TfidfVectorizer().fit(input_strings)
+        resVec = resVec + lambda_ * (1 - tfidfv.transform(input_strings).toarray())
 
-    countVec = np.maximum(0, countVec)
+        sumVec = np.sum(resVec, axis=0)
 
-    delta = 10**(-9)
-    resVec = np.maximum(0, 1 + np.log(countVec + delta))
+        for k in vector.vocabulary_:
+            rk = textblob.Word(k).lemmatize('v')
+            if (rk in JOY) == True:
+                JoySum += sumVec[vector.vocabulary_[k]]
 
-    lambda_ = 0.05
-    tfidfv = TfidfVectorizer().fit(input_strings)
-    resVec = resVec + lambda_ * (1 - tfidfv.transform(input_strings).toarray())
+            if (rk in SADNESS) == True:
+                SadnessSum += sumVec[vector.vocabulary_[k]]
 
-    sumVec = np.sum(resVec, axis=0)
+            if (rk in ANGER) == True:
+                AngerSum += sumVec[vector.vocabulary_[k]]
 
-    for k in vector.vocabulary_:
-        if (k in JOY) == True:
-            #print(k, round(sumVec[vector.vocabulary_[k]], 3))
-            JoySum += sumVec[vector.vocabulary_[k]]
+            if (rk in FEAR) == True:
+                FearSum += sumVec[vector.vocabulary_[k]]
 
-        if (k in SADNESS) == True:
-            #print(k, round(sumVec[vector.vocabulary_[k]], 3))
-            SadnessSum += sumVec[vector.vocabulary_[k]]
+            if (rk in DISGUST) == True:
+                DisgustSum += sumVec[vector.vocabulary_[k]]
 
-        if (k in ANGER) == True:
-            #print(k, round(sumVec[vector.vocabulary_[k]], 3))
-            AngerSum += sumVec[vector.vocabulary_[k]]
-        if (k in FEAR) == True:
-            #print(k, round(sumVec[vector.vocabulary_[k]], 3))
-            FearSum += sumVec[vector.vocabulary_[k]]
+            if (rk in RESTLESS) == True:
+                RestlessSum += sumVec[vector.vocabulary_[k]]
 
-        if (k in DISGUST) == True:
-            #print(k, round(sumVec[vector.vocabulary_[k]], 3))
-            DisgustSum += sumVec[vector.vocabulary_[k]]
+        resArr = [JoySum, SadnessSum, AngerSum, FearSum, DisgustSum, RestlessSum]
 
-        if (k in RESTLESS) == True:
-            #print(k, round(sumVec[vector.vocabulary_[k]], 3))
-            RestlessSum += sumVec[vector.vocabulary_[k]]
+        res = resArr.index(max(resArr))
+        res = str(res)
 
-    resArr = [JoySum, SadnessSum, AngerSum, FearSum, DisgustSum, RestlessSum]
+        return res
 
-    res = resArr.index(max(resArr))
-    res = str(res)
-    return res
+    except Exception as ex:
+        return "6"

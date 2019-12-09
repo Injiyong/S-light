@@ -8,15 +8,15 @@ public class TextItem {
 
     private String text;
     private String date;
-    private String photoUrl;
+    private String color;
 
     public TextItem() {
     }
 
-    public TextItem(String text, String date, String photoUrl) {
+    public TextItem(String text, String date, String color) {
         this.text = text;
         this.date = date;
-        this.photoUrl = photoUrl;
+        this.color = color;
     }
 
     public String getText() {
@@ -35,11 +35,8 @@ public class TextItem {
         this.date = date;
     }
 
-    public String getPhotoUrl() {
-        return photoUrl;
+    public String getColor() {
+        return color;
     }
 
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
-    }
 }

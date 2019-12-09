@@ -10,7 +10,7 @@
     <item android:id="@android:id/secondaryProgress">
         <clip>
             <shape android:shape="line">
-                <stroke android:width="10dp" android:color="#f2c50a" />
+                <stroke android:width="10dp" android:color="#FFCD4A" />
             </shape>
         </clip>
     </item>
@@ -18,7 +18,7 @@
     <item android:id="@android:id/progress" >
         <clip>
             <shape android:shape="line">
-                <stroke android:width="10dp" android:color="#f2c50a" />
+                <stroke android:width="10dp" android:color="#FFCD4A" />
             </shape>
         </clip>
     </item>

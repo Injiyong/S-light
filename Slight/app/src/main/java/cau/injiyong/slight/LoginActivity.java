@@ -1,8 +1,11 @@
 package cau.injiyong.slight;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -26,6 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.core.Context;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
@@ -42,7 +47,7 @@ import android.os.Message;
 import android.os.Handler;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final int RC_SIGN_IN = 10;
     //    private SessionCallback sessionCallback;
@@ -57,12 +62,26 @@ public class LoginActivity extends AppCompatActivity {
     private static final int MSG_TIMER = 1;              // Switch문에서 사용하게 되는 Key값입니다.
     private static final int BACKKEY_TIMEOUT = 2;    // Interval을 정의합니다.
     private static final int IN_MILLISEC = 1000;        // Millis를 정의합니다.
+    SignInButton button;
+    ProgressDialog progressDialog;
 
+    @Override
+
+    public void onStart() {
+        super.onStart();
+        // 활동을 초기화할 때 사용자가 현재 로그인되어 있는지 확인합니다.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("로그인 로딩");
+        progressDialog.setCancelable(true);
+        progressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Horizontal);
         mAuth = FirebaseAuth.getInstance();
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -70,17 +89,19 @@ public class LoginActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        SignInButton button = (SignInButton) findViewById(R.id.login_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, RC_SIGN_IN);
-            }
-        });
-//        sessionCallback = new SessionCallback();
-//        Session.getCurrentSession().addCallback(sessionCallback);
-//        Session.getCurrentSession().checkAndImplicitOpen();
+        button = (SignInButton) findViewById(R.id.login_button);
+        Button loginbtn=(Button)findViewById(R.id.custom_login);
+        loginbtn.setOnClickListener(this);
+
+
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        progressDialog.show();
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
@@ -163,6 +184,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private void signOut() {
+        FirebaseAuth.getInstance().signOut();
+    }
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         //Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
@@ -172,155 +197,23 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            //유저 정보 디비에 넘기려고 추가한 부분
-//                            FirebaseUser user = mAuth.getCurrentUser();
-//                            String userID = mAuth.getUid();
-//                            String tokenID=FirebaseInstanceId.getInstance().getToken();
-//                            database = FirebaseDatabase.getInstance();
-//                            myRef = database.getReference("userInfo");
-
-
 
                             Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
-                            // Sign in success, update UI with the signed-in user's information
-                            //Log.d(TAG, "signInWithCredential:success")
-                            //  updateUI(user);
 
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                             finish();
+                            progressDialog.dismiss();
 
                         } else {
-                            // If sign in fails, display a message to the user.
-                            //Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            //Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            //updateUI(null);
+
                         }
 
-                        // ...
                     }
                 });
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if(Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
-//            super.onActivityResult(requestCode, resultCode, data);
-//            return;
-//        }
-//    }
-//
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        Session.getCurrentSession().removeCallback(sessionCallback);
-//    }
-//
-//    private class SessionCallback implements ISessionCallback {
-//        @Override
-//        public void onSessionOpened() {
-//            UserManagement.getInstance().me(new MeV2ResponseCallback() {
-//                @Override
-//                public void onFailure(ErrorResult errorResult) {
-//                    int result = errorResult.getErrorCode();
-//
-//                    if(result == ApiErrorCode.CLIENT_ERROR_CODE) {
-//                        Toast.makeText(getApplicationContext(), "네트워크 연결이 불안정합니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
-//                        finish();
-//                    } else {
-//                        Toast.makeText(getApplicationContext(),"로그인 도중 오류가 발생했습니다: "+errorResult.getErrorMessage(),Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//
-//                @Override
-//                public void onSessionClosed(ErrorResult errorResult) {
-//                    Toast.makeText(getApplicationContext(),"세션이 닫혔습니다. 다시 시도해 주세요: "+errorResult.getErrorMessage(),Toast.LENGTH_SHORT).show();
-//                }
-//
-//                @Override
-//                public void onSuccess(MeV2Response result) {
-//                    String needsScopeAutority = ""; // 정보 제공이 허용되지 않은 항목의 이름을 저장하는 변수
-//
-//                    // 이메일, 성별, 연령대, 생일 정보를 제공하는 것에 동의했는지 체크
-//                    if(result.getKakaoAccount().needsScopeAccountEmail()) {
-//                        needsScopeAutority = needsScopeAutority + "이메일";
-//                    }
-//                    if(result.getKakaoAccount().needsScopeGender()) {
-//                        needsScopeAutority = needsScopeAutority + ", 성별";
-//                    }
-//                    if(result.getKakaoAccount().needsScopeAgeRange()) {
-//                        needsScopeAutority = needsScopeAutority + ", 연령대";
-//                    }
-//                    if(result.getKakaoAccount().needsScopeBirthday()) {
-//                        needsScopeAutority = needsScopeAutority + ", 생일";
-//                    }
-//
-//                    if(needsScopeAutority.length() != 0) { // 정보 제공이 허용되지 않은 항목이 있다면 -> 허용되지 않은 항목을 안내하고 회원탈퇴 처리
-//                        if(needsScopeAutority.charAt(0) == ',') {
-//                            needsScopeAutority = needsScopeAutority.substring(2);
-//                        }
-//                        Toast.makeText(getApplicationContext(), needsScopeAutority+"에 대한 권한이 허용되지 않았습니다. 개인정보 제공에 동의해주세요.", Toast.LENGTH_SHORT).show(); // 개인정보 제공에 동의해달라는 Toast 메세지 띄움
-//
-//                        // 회원탈퇴 처리
-//                        UserManagement.getInstance().requestUnlink(new UnLinkResponseCallback() {
-//                            @Override
-//                            public void onFailure(ErrorResult errorResult) {
-//                                int result = errorResult.getErrorCode();
-//
-//                                if(result == ApiErrorCode.CLIENT_ERROR_CODE) {
-//                                    Toast.makeText(getApplicationContext(), "네트워크 연결이 불안정합니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
-//                                } else {
-//                                    Toast.makeText(getApplicationContext(), "오류가 발생했습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onSessionClosed(ErrorResult errorResult) {
-//                                Toast.makeText(getApplicationContext(), "로그인 세션이 닫혔습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
-//                            }
-//
-//                            @Override
-//                            public void onNotSignedUp() {
-//                                Toast.makeText(getApplicationContext(), "가입되지 않은 계정입니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
-//                            }
-//
-//                            @Override
-//                            public void onSuccess(Long result) { }
-//                        });
-//
-//                    } else { // 모든 항목에 동의했다면 -> 유저 정보를 가져와서 MainActivity에 전달하고 MainActivity 실행.
-//                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                        intent.putExtra("name", result.getNickname());
-//                        intent.putExtra("profile", result.getProfileImagePath());
-//
-//                        if (result.getKakaoAccount().hasEmail() == OptionalBoolean.TRUE)
-//                            intent.putExtra("email", result.getKakaoAccount().getEmail());
-//                        else
-//                            intent.putExtra("email", "none");
-//                        if (result.getKakaoAccount().hasAgeRange() == OptionalBoolean.TRUE)
-//                            intent.putExtra("ageRange", result.getKakaoAccount().getAgeRange().getValue());
-//                        else
-//                            intent.putExtra("ageRange", "none");
-//                        if (result.getKakaoAccount().hasGender() == OptionalBoolean.TRUE)
-//                            intent.putExtra("gender", result.getKakaoAccount().getGender().getValue());
-//                        else
-//                            intent.putExtra("gender", "none");
-//                        if (result.getKakaoAccount().hasBirthday() == OptionalBoolean.TRUE)
-//                            intent.putExtra("birthday", result.getKakaoAccount().getBirthday());
-//                        else
-//                            intent.putExtra("birthday", "none");
-//
-//
-//                        startActivity(intent);
-//                        finish();
-//                    }
-//                }
-//            });
-//        }
-//
-//        @Override
-//        public void onSessionOpenFailed(KakaoException e) {
-//            Toast.makeText(getApplicationContext(), "로그인 도중 오류가 발생했습니다. 인터넷 연결을 확인해주세요: "+e.toString(), Toast.LENGTH_SHORT).show();
-//        }
-//    }
+
+
+
 }

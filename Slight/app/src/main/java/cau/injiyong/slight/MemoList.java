@@ -2,6 +2,7 @@ package cau.injiyong.slight;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -52,11 +53,18 @@ public class MemoList extends AppCompatActivity implements AdapterView.OnItemCli
     private EditText mMessageEditText;
     private Button mSendButton;
     private String mUsername;
+    public static Context mContext;
+
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loadActivity();
+    }
+
+    private void loadActivity(){
+        mContext=this;
         setContentView(R.layout.activity_memo_list);
 
         mUsername = ANONYMOUS;
@@ -98,11 +106,14 @@ public class MemoList extends AppCompatActivity implements AdapterView.OnItemCli
             //데이터가 변화되었을 때
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
             }
 
             //데이터가 제거되었을때
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+
             }
 
             // 데이터가 파이어베이스 DB 리스트 위치 변경되었을때
@@ -134,11 +145,18 @@ public class MemoList extends AppCompatActivity implements AdapterView.OnItemCli
     public void onItemClick(AdapterView<?> parent, View v, int position, long id)
     {
         TextItem item=(TextItem)parent.getItemAtPosition(position);
-        Pop pop=new Pop(this,item);
+        Pop pop=new Pop(mContext,item);
         pop.show();
+
 
     }
 
+    public void refresh(){
+        this.finish();
+        Intent intent = new Intent(MemoList.this, MemoList.class);
+        startActivity(intent);
+
+    }
 
 
 }

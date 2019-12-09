@@ -1,79 +1,111 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:layout_marginTop="200dp"
-    android:layout_marginBottom="200dp"
-    >
+    android:layout_marginLeft="25dp"
+    android:layout_marginRight="25dp"
+    android:layout_marginTop="160dp"
+    android:layout_marginBottom="160dp">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#f2c50a"
-        android:layout_weight="4">
+        android:layout_gravity="center" >
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="memo"
-            android:textColor="#FFFFFF"
-            android:background="#f2c50a"
-            android:textSize="20dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_weight="1"
-        android:background="#FFFFFF"
-        android:orientation="vertical">
-
-        <ScrollView
-            android:layout_width="333dp"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/dialog_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:textSize="20dp" />
-        </ScrollView>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:layout_weight="4">
-
-        <Button
-            android:id="@+id/btnOK"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#f2c50a"
-            android:text="확인"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            />
+            android:padding="15dp" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#5D5D5D"
+                    android:layout_weight="4">
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="MEMO"
+                        android:textColor="#FFFFFF"
+                        android:background="#5D5D5D"
+                        android:textSize="20dp"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1.5"
+                    android:background="#ffffff"
+                    android:orientation="vertical">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/dialog_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            android:textSize="20dp"
+                            android:textColor="#424242"/>
+                    </ScrollView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#7C7C7C"
+                    android:layout_weight="4">
+
+                    <Button
+                        android:id="@+id/btnExe"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#8C8C8C"
+                        android:text="실행"
+                        android:layout_margin="1dp"
+                        android:textColor="#f2c50a"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        />
+
+                    <Button
+                        android:id="@+id/btnDel"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#8C8C8C"
+                        android:text="삭제"
+                        android:layout_margin="1dp"
+                        android:textColor="#f2c50a"
+                        android:textSize="20dp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </FrameLayout>
 
         <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#f2c50a"
-            android:text="취소"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"/>
-    </LinearLayout>
+            android:id="@+id/xbtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right|top"
+            android:background="@drawable/cancel" />
 
-
-</LinearLayout>
+    </FrameLayout>
+</FrameLayout>
